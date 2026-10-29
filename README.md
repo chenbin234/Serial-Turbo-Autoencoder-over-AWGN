@@ -56,7 +56,7 @@ BER and BLER of the released models, with $10^7$ random packets per SNR point:
 
 At a BER of $10^{-4}$, the weight-shared model needs about 4.1 dB and the unrolled model about 4.0 dB. The paper reports about 3.9 dB for its serial TurboAE (Fig. 7).
 
-**Not included:** the Gaussian pre-training of the parallel TurboAE (Sec. IV) and the classical reference curves (LTE turbo, LDPC, normal approximation).
+**Not included:** the parallel TurboAE and its Gaussian pre-training (Sec. IV), and the classical reference curves (LTE turbo, LDPC, normal approximation).
 
 ## 2. Installation
 
@@ -103,8 +103,8 @@ wandb login
 ├── src/
 │   ├── models/
 │   │   ├── serial_turbo_autoencoder.py    # Serial TurboAE: Encoder, Decoder, end-to-end Turbo_AutoEncoder
-│   │   ├── parallel_turbo_autoencoder.py  # Parallel TurboAE of Jiang et al. (rate 1/3, no checkpoint)
-│   │   └── components/                    # Straight-through estimator (STE.py) and other layers
+│   │   └── components/
+│   │       └── STE.py                     # Straight-through estimator for the binarization
 │   ├── channel/
 │   │   └── AWGN_Channel.py                # Complex AWGN channel, SNR given as Es/N0
 │   ├── train/
@@ -120,8 +120,6 @@ wandb login
 ├── uv.lock                                # Locked dependency versions
 └── LICENSE
 ```
-
-The synchronization modules in `components/` (`sync_*.py`), [BFC_debug.py](src/channel/BFC_debug.py), and `TurboAutoencoderSync` come from a block-fading version of this code base and are not used on the AWGN channel.
 
 ## 4. Evaluating the Pretrained Models
 
@@ -144,7 +142,7 @@ test_data_samples: int = 10_000_000  # packets per SNR point, split across all G
 python -m src.train.train_turbo_ae
 ```
 
-**Unrolled model.** Point `pretrained` to the other checkpoint, set `num_iteration` to 1, and add a `num_of_pair` field (the model reads it with a default of 1):
+**Unrolled model.** Point `pretrained` to the other checkpoint, set `num_iteration` to 1, and set `num_of_pair` to 6:
 
 ```python
 pretrained: str | None = "./trained_models/Turbo_AutoEncoder_k64n64_iter1_pair6_20261027_23_37_00/Turbo_AutoEncoder_20261027_23_37_00_epoch800.pth"
@@ -188,8 +186,6 @@ torchrun --standalone --nproc_per_node=2 -m src.train.train_turbo_ae --use-ddp
 
 Each epoch runs `num_train_enc` encoder steps followed by `num_train_dec` decoder steps. When the validation loss has not improved for 50 epochs, the batch size doubles (up to 4000); after that, the learning rate drops by a factor of 10 (down to $10^{-6}$).
 
-`--model-type parallel_turbo_autoencoder` trains the parallel TurboAE instead. It is not part of the reproduced results.
-
 ### 5.2 Outputs
 
 - **Checkpoints** are written to `trained_models/Turbo_AutoEncoder_<timestamp>/Turbo_AutoEncoder_<timestamp>_epoch<N>.pth` every `save_every` epochs (default 800, i.e., only the final model).
@@ -201,7 +197,7 @@ The `TurboAEConfig` fields behind the hyperparameters in Table I of the paper:
 
 | Paper | Field | Setting | Meaning |
 | --- | --- | ---: | --- |
-| $(k, n)$ | `k`, `input_size` | 64 | Information bits per packet; the encoder emits $k$ complex symbols, so $n = 2k$ real |
+| $(k, n)$ | `k` | 64 | Information bits per packet; the encoder emits $k$ complex symbols, so $n = 2k$ real |
 | $F_c = F$ | `F` | 10 | Width of the interleaved feature maps |
 | $T_\text{enc}$, $T_\text{dec}$ | `num_train_enc`, `num_train_dec` | 100, 500 | Encoder and decoder steps per epoch |
 | Decoder iterations | `num_iteration`, `num_of_pair` | 6, 1 | Iterations per inner/outer CNN pair, and number of pairs |

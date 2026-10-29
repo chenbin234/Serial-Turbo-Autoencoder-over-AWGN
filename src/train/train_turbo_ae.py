@@ -1,4 +1,4 @@
-"""Train serial/AWGN, serial/block-fading, or parallel/AWGN Turbo AutoEncoder models."""
+"""Train and evaluate the serial Turbo AutoEncoder over the AWGN channel."""
 
 # import libraries
 import argparse
@@ -15,14 +15,11 @@ from torch.utils.data import DataLoader
 import wandb
 from src.features import InfobitDataset
 from src.inference.inference_turboae import make_inference_dataloader
-from src.models import TurboAutoencoderSync, generate_permutation_array
-from src.models.parallel_turbo_autoencoder import Turbo_AutoEncoder as ParallelTurboAutoencoder
-from src.models.serial_turbo_autoencoder import Turbo_AutoEncoder as SerialTurboAutoencoder
+from src.models import Turbo_AutoEncoder, generate_permutation_array
 from src.train.trainer import Trainer
 from src.train.utils import (
     broadcast_seed,
     build_loss_fn,
-    build_sync_loss_fn,
     ddp_setup,
     get_git_metadata,
     resolve_device,
@@ -34,117 +31,60 @@ from src.train.utils import (
 class TurboAEConfig:
     """TurboAE hyperparameters with their default values."""
 
-    model_type: str = "serial_turbo_autoencoder"  # "parallel_turbo_autoencoder" or "serial_turbo_autoencoder"
     run_name: str | None = "unknown"
     git_branch: str = "unknown"
     git_commit_hash: str = "unknown"
-    trainable_parameters: int = 0
     epochs: int = 800
-    epochs_integrate_sync: int = 0
     num_samples: int = 5000
     batch_size: int = 5000
     start_epoch: int = 1
-    print_every: int | None = None
     save_every: int = 800
-    in_channels: int = 1
-    input_size: int = 64
-    k: int = 64  # number of information bits
-    n: int = 64  # code length (complex) for block fading; serial AWGN emits k symbols
-    n_M: int = 0
+    k: int = 64  # number of information bits; the encoder emits k complex symbols
     F: int = 10
-    num_iteration: int = 6
+    num_iteration: int = 6  # Decoder feedback iterations per EQ/DEC pair
+    num_of_pair: int = 1  # Independently parameterized EQ/DEC pairs; 1 shares one pair across all iterations
     num_train_enc: int = 100  # Number of iterations for training the encoder in each epoch
     num_train_dec: int = 500  # Number of iterations for training the decoder in each epoch
-    num_train_sync_enc: int = 1  # Sync-encoder steps per epoch.
-    num_train_sync_block: int = 1  # Sync-block steps per epoch.
-    num_train_joint_enc: int = 1  # Joint encoder/sync steps per epoch.
-    num_train_joint_dec: int = 1  # Joint decoder/sync steps per epoch.
-    enc_num_unit: int = 100  # Parallel encoder CNN width.
-    enc_num_layer: int = 5  # Parallel encoder CNN depth.
-    kernel_size: int = 5  # Parallel encoder/decoder CNN kernel size.
-    num_iter_ft: int = 5  # Parallel decoder extrinsic-information width.
-    dec_num_unit: int = 100
-    dec_num_layer: int = 5
-    add_parity_check_bit: bool = False  # Add a parity bit at the encoder input.
-    fixed_pilot_length: int = 0  # Fixed pilot length for each block (0 means no fixed pilot)
     train_enc_snr_high: float = 4.0  # dB
     train_enc_snr_low: float = 4.0  # dB
     train_dec_snr_high: float = 4.0  # dB
     train_dec_snr_low: float = 0.5  # dB
-    train_sync_snr_high: float = 15.0  # dB
-    train_sync_snr_low: float = 15.0  # dB
     test_snr_high: float = 6  # dB
     test_snr_low: float = 1  # dB
     test_snr_interval: float = 1.0  # dB
     test_data_samples: int = 10_000_000  # Total test samples per SNR across all workers.
-    channel: str = "awgn"  # or "block_fading" (serial model only)
-    num_taps: int = 1  # Number of taps for the Proakis channel
-    is_delay: bool = True  # Whether to include delay in the channel
-    independent_delay_per_block: bool = False  # Sample delay independently per block.
-    nb: int = 4
-    tp: int = 1
-    ts: float = 0.125
-    N_up: int = 8
-    dmax: int = 12
-    alpha: float = 0.5
-    beta: float = 1
     pretrained: str | None = (
-        "./trained_models/Turbo_AutoEncoder_k64n64_iter6_pair1_20261027_10_51_27/Turbo_AutoEncoder_20261027_10_51_27_epoch800.pth"  # Path to the pretrained model: "./trained_models/Turbo_AutoEncoder_20241205_10_38_41/Turbo_AutoEncoder_20241205_10_38_41_epoch10.pth"
+        "./trained_models/Turbo_AutoEncoder_k64n64_iter6_pair1_20261027_10_51_27/Turbo_AutoEncoder_20261027_10_51_27_epoch800.pth"  # Path to the pretrained model; None starts from random weights
     )
     is_inference: bool = True  # Skip training entirely and only run inference on "pretrained".
-    loss_function: str = "BCE"  # "BCE", "MSE", "ProductLoss", "MaxLoss", "SmoothMaxLoss", "LogSumExpLoss", "PNormLoss", "HybridBCESoftBLERLoss", "HybridBCEProductLoss", "HybridBCEMaxLoss", "HybridBCESmoothMaxLoss", "HybridBCELogSumExpLoss", "HybridBCEPNormLoss"
+    loss_function: str = "BCE"  # "BCE" or "MSE"
     bce_epsilon: float = 1e-7  # Avoid exact 0/1 probabilities in BCELoss.
     grad_clip_norm: float = 1.0  # Prevent rare exploding gradients from poisoning weights.
     skip_nonfinite_gradients: bool = True
     learning_rate: float = 1e-4
-    is_train_sync_block: bool = True
-    sync_loss_function: str = "smooth_l1"  # Options: "MSE", "MAE", "Huber", "smooth_l1", "log_cosh", or "relative_mse""
-    sync_learning_rate: float = 1e-4
-    sync_hidden_channels: int = 64
-    sync_num_layers: int = 4
-    sync_kernel_size: int = 5
-    sync_activation: str = "gelu"
-    sync_fuse_blocks: bool = True  # if true, output delay shape (batch, 1, 1), if false, output delay shape (batch, nb, 1)
-    sync_separate_q_eps: bool = True
-    smooth_l1_beta: float = 0.2
     save_model_name: str = ""
-    snapshot_path: str = ""
     use_ddp: bool = False
     workstation_GPU_index: int = 0
     max_stuck_counter: int = 49
     encoder_output_power_constraint: str = "per_block"  # "per_symbol" or "per_block" or "none"
-    receiver_resample_method: str = "symbol_lmmse"  # "symbol_lmmse", "lmmse", "linear", or "nearest"
-    receiver_resample_sample_phase: float = 0.5  # used by "linear" and "nearest"
-    receiver_mmse_regularization: float = 0.2  # used by "symbol_lmmse" and "lmmse"
     enforce_qpsk_symbols: bool = (
         False  # if true, enforce the encoder output to be in the QPSK constellation; if false, allow the encoder to learn any constellation
     )
-    is_soft_qpsk: bool = False  # if true, pull the encoder output toward normalized QPSK without forcing it; excludes enforce_qpsk_symbols
-    soft_qpsk_alpha: float = 0.8  # used by is_soft_qpsk, in [0, 1]: 0 leaves unit-energy symbols unchanged, 1 snaps them onto QPSK
     p_array_seed: int = 6
     seed: int = 0
 
 
 def make(
     config: wandb.sdk.wandb_config.Config,
-) -> tuple[
-    TurboAutoencoderSync | SerialTurboAutoencoder | ParallelTurboAutoencoder,
-    nn.Module,
-    nn.Module | None,
-    optim.Optimizer,
-    optim.Optimizer,
-    optim.Optimizer | None,
-    DataLoader,
-]:
+) -> tuple[Turbo_AutoEncoder, nn.Module, optim.Optimizer, optim.Optimizer, DataLoader]:
     """
-    Build the model, losses, optimizers, and test data loader.
+    Build the model, loss, optimizers, and test data loader.
 
     Returns:
         The model and all components required for training and evaluation.
 
     Raises:
-        ValueError: If the channel configuration is unsupported, or if an
-            inference-only run has no pretrained checkpoint.
+        ValueError: If an inference-only run has no pretrained checkpoint.
 
     """
     # An inference-only run never updates the weights, so it is only meaningful
@@ -152,57 +92,15 @@ def make(
     if config.is_inference and not config.pretrained:
         raise ValueError("Inference-only runs (is_inference=True) require 'pretrained' to point to a checkpoint.")
 
-    # Keep the former model name usable by saved run configurations.
-    is_serial = config.model_type in {"serial_turbo_autoencoder", "Turbo_AutoEncoder"}
-    is_serial_awgn = is_serial and config.channel == "awgn"
-    is_parallel_awgn = config.model_type == "parallel_turbo_autoencoder" and config.channel == "awgn"
-    is_awgn = is_serial_awgn or is_parallel_awgn
-    if not (is_serial and config.channel == "block_fading" and config.is_delay) and not is_awgn:
-        raise ValueError(
-            f"Unsupported model/channel combination: {config.model_type!r}/{config.channel!r}. "
-            "Supported combinations are serial_turbo_autoencoder/block_fading with delay "
-            "and serial_turbo_autoencoder/awgn or parallel_turbo_autoencoder/awgn."
-        )
-    if is_awgn and config.add_parity_check_bit:
-        architecture = "serial" if is_serial_awgn else "parallel"
-        raise ValueError(f"The {architecture} AWGN model does not support add_parity_check_bit=True.")
-    if is_awgn and config.in_channels != 1:
-        raise ValueError("The AWGN bit dataset requires in_channels=1.")
-    if is_serial_awgn and config.input_size != config.k:
-        raise ValueError("The serial AWGN bit dataset requires input_size=k.")
-
     # test dataset
-    test_dataset = InfobitDataset(num_samples=config.test_data_samples, k=config.input_size)
+    test_dataset = InfobitDataset(num_samples=config.test_data_samples, k=config.k)
     test_dataloader = make_inference_dataloader(test_dataset, batch_size=config.batch_size, use_ddp=config.use_ddp)
 
     # Initialize the model
-    model: TurboAutoencoderSync | SerialTurboAutoencoder | ParallelTurboAutoencoder
-    if is_parallel_awgn:
-        model = ParallelTurboAutoencoder(
-            in_channels=config.in_channels,
-            enc_num_unit=config.enc_num_unit,
-            kernel_size=config.kernel_size,
-            enc_num_layer=config.enc_num_layer,
-            num_iteration=config.num_iteration,
-            num_iter_ft=config.num_iter_ft,
-            dec_num_unit=config.dec_num_unit,
-            dec_num_layer=config.dec_num_layer,
-            p_array_seed=config.p_array_seed,
-        )
-    elif is_serial_awgn:
-        model = SerialTurboAutoencoder(autoencoder_config=config)
-    else:
-        model = TurboAutoencoderSync(autoencoder_config=config)
+    model = Turbo_AutoEncoder(autoencoder_config=config)
 
     print("p_array_seed:", config.p_array_seed)
-    if config.add_parity_check_bit:
-        print(
-            "p_array:",
-            generate_permutation_array(k=config.k + 1, seed=config.p_array_seed),
-        )
-    else:
-        block_length = config.input_size if is_parallel_awgn else config.k
-        print("p_array:", generate_permutation_array(k=block_length, seed=config.p_array_seed))
+    print("p_array:", generate_permutation_array(k=config.k, seed=config.p_array_seed))
 
     if config.pretrained:
         device = resolve_device(int(os.environ.get("LOCAL_RANK", config.workstation_GPU_index)))
@@ -212,34 +110,20 @@ def make(
 
     loss_fn = build_loss_fn(config)
 
-    # Make the loss and optimizer
-    if is_awgn:
-        optimizer_encoder = optim.Adam(model.encoder.parameters(), lr=config.learning_rate)
-        optimizer_decoder = optim.Adam(model.decoder.parameters(), lr=config.learning_rate)
-        optimizer_sync = None
-        sync_loss_function = None
-    else:
-        assert isinstance(model, TurboAutoencoderSync)
-        optimizer_encoder = optim.Adam(model.encoder.parameters(), lr=config.learning_rate)
-        optimizer_decoder = optim.Adam(
-            filter(lambda p: p.requires_grad, model.decoder.parameters()),
-            lr=config.learning_rate,
-        )
-        optimizer_sync = optim.Adam(model.sync_block.parameters(), lr=config.sync_learning_rate)
-        sync_loss_function = build_sync_loss_fn(config)
+    # Make the optimizers
+    optimizer_encoder = optim.Adam(model.encoder.parameters(), lr=config.learning_rate)
+    optimizer_decoder = optim.Adam(model.decoder.parameters(), lr=config.learning_rate)
 
     return (
         model,
         loss_fn,
-        sync_loss_function,
         optimizer_encoder,
         optimizer_decoder,
-        optimizer_sync,
         test_dataloader,
     )
 
 
-def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | SerialTurboAutoencoder | ParallelTurboAutoencoder:
+def model_pipeline(hyperparameters: TurboAEConfig) -> Turbo_AutoEncoder:
     """
     Train and evaluate a model with the supplied hyperparameters.
 
@@ -249,9 +133,6 @@ def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | Ser
     Returns:
         The trained model, or the pretrained model for an inference-only run.
 
-    Raises:
-        ValueError: If the channel configuration is unsupported.
-
     """
     # Only rank zero creates an online W&B run. Disabled runs still provide a
     # local wandb.config object to the other DDP workers.
@@ -260,7 +141,7 @@ def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | Ser
         project="Joint-detection-and-decoding-in-short-packet-communications",
         config=asdict(hyperparameters),
         name=hyperparameters.run_name,
-        group=hyperparameters.model_type,
+        group="serial_turbo_autoencoder",
         mode=wandb_mode,
         save_code=True,
     ):
@@ -271,10 +152,8 @@ def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | Ser
         (
             model,
             loss_fn,
-            sync_loss_function,
             optimizer_encoder,
             optimizer_decoder,
-            optimizer_sync,
             test_dataloader,
         ) = make(config)
         print(model)
@@ -284,20 +163,14 @@ def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | Ser
             config=config,
             model=model,
             loss_fn=loss_fn,
-            sync_loss_function=sync_loss_function,
             optimizer_encoder=optimizer_encoder,
             optimizer_decoder=optimizer_decoder,
-            optimizer_sync=optimizer_sync,
         )
         # Inference-only runs evaluate the pretrained weights loaded in make().
         if config.is_inference:
             print("Inference-only run: skipping training.")
-        elif config.channel == "block_fading":
-            trainer.train_TurboAE_RayleighBlockFading()
-        elif config.channel == "awgn":
-            trainer.train_TurboAE_AWGN()
         else:
-            raise ValueError("Invalid channel")
+            trainer.train_TurboAE_AWGN()
 
         if config.use_ddp:
             # Every worker evaluates its test-data shard. Inference synchronizes
@@ -318,18 +191,6 @@ def model_pipeline(hyperparameters: TurboAEConfig) -> TurboAutoencoderSync | Ser
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments for the training run."""
     parser = argparse.ArgumentParser(description="Train the Turbo AutoEncoder")
-    parser.add_argument(
-        "--model-type",
-        choices=["serial_turbo_autoencoder", "parallel_turbo_autoencoder"],
-        default=TurboAEConfig.model_type,
-        help="Turbo autoencoder architecture to train.",
-    )
-    parser.add_argument(
-        "--channel",
-        choices=["block_fading", "awgn"],
-        default=TurboAEConfig.channel,
-        help="Channel model; parallel_turbo_autoencoder currently supports awgn only.",
-    )
     parser.add_argument(
         "--p-array-seed",
         type=int,
@@ -359,8 +220,6 @@ def main() -> None:
     git_branch, git_commit_hash = get_git_metadata()
 
     config = TurboAEConfig(
-        model_type=args.model_type,
-        channel=args.channel,
         run_name=os.environ.get("SLURM_JOB_NAME"),
         git_branch=git_branch,
         git_commit_hash=git_commit_hash,
@@ -390,7 +249,6 @@ def main() -> None:
     save_model_name = "Turbo_AutoEncoder_" + time
     # save the model name in the config for later use
     config.save_model_name = save_model_name
-    config.snapshot_path = f"./trained_models/{save_model_name}/{save_model_name}_epoch"
 
     # create the folder if it doesn't exist
     if config.use_ddp:
