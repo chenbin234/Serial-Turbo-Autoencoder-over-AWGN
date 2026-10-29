@@ -10,12 +10,19 @@ A PyTorch reproduction of the serial turbo autoencoder (TurboAE) on the AWGN cha
 
 ## Contents
 
-1. [Overview](#1-overview)
-2. [Installation](#2-installation)
-3. [Repository Structure](#3-repository-structure)
-4. [Evaluating the Pretrained Models](#4-evaluating-the-pretrained-models)
-5. [Training from Scratch](#5-training-from-scratch)
-7. [License](#7-license)
+- [Serial Turbo Autoencoder over AWGN](#serial-turbo-autoencoder-over-awgn)
+  - [Contents](#contents)
+  - [1. Overview](#1-overview)
+    - [Two decoder variants](#two-decoder-variants)
+    - [Results](#results)
+  - [2. Installation](#2-installation)
+  - [3. Repository Structure](#3-repository-structure)
+  - [4. Evaluating the Pretrained Models](#4-evaluating-the-pretrained-models)
+  - [5. Training from Scratch](#5-training-from-scratch)
+    - [5.1 Running](#51-running)
+    - [5.2 Outputs](#52-outputs)
+    - [5.3 Configuration reference](#53-configuration-reference)
+  - [6. License](#6-license)
 
 ## 1. Overview
 
@@ -47,10 +54,7 @@ The training loss (BER/BLER validation) does not appear to stop decreasing, so a
 ![image-20261029132930916](./assets/image-20261029132930916.png)
 
 
-<<<<<<< HEAD
-=======
 **Not included:** the parallel TurboAE and its Gaussian pre-training (Sec. IV), and the classical reference curves (LTE turbo, LDPC, normal approximation).
->>>>>>> c9ca6018aaba92a01af631a22b340978c8220faf
 
 ## 2. Installation
 
@@ -97,12 +101,8 @@ wandb login
 ├── src/
 │   ├── models/
 │   │   ├── serial_turbo_autoencoder.py    # Serial TurboAE: Encoder, Decoder, end-to-end Turbo_AutoEncoder
-<<<<<<< HEAD
-│   │   └── components/                    # Straight-through estimator (STE.py) and other layers
-=======
 │   │   └── components/
 │   │       └── STE.py                     # Straight-through estimator for the binarization
->>>>>>> c9ca6018aaba92a01af631a22b340978c8220faf
 │   ├── channel/
 │   │   └── AWGN_Channel.py                # Complex AWGN channel, SNR given as Es/N0
 │   ├── train/
@@ -202,7 +202,7 @@ The `TurboAEConfig` fields behind the hyperparameters in Table I of the paper:
 | – | `loss_function` | BCE | Binary cross-entropy on the bit estimates |
 | – | `enforce_qpsk_symbols` | False | `True` binarizes the inner encoder output ("Serial TurboAE Binary" in Fig. 5) |
 
-## 7. License
+## 6. License
 
 This project is released under the [MIT License](LICENSE).
 
