@@ -1,0 +1,983 @@
+p_array_seed: 15
+p_array: tensor([52, 14, 61, 30, 22, 38, 16, 57, 42, 50, 56, 60, 58, 49, 24, 59, 43,  3,
+        35, 20, 25, 40,  9,  6, 33, 63, 34, 18, 54,  2, 26, 62, 46, 48,  1, 36,
+        44, 51, 13, 19, 37, 39, 41,  4, 15, 10, 32, 23, 31, 45, 17, 29, 47, 21,
+        11,  7, 27, 28,  0, 55,  5, 12, 53,  8])
+Turbo_AutoEncoder(
+  (encoder): Encoder(
+    (outer_encoder): CNNBlock(
+      (conv_layers): Sequential(
+        (0): Conv1d(1, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (1): ELU(alpha=1.0)
+        (2): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (3): ELU(alpha=1.0)
+        (4): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (5): ELU(alpha=1.0)
+        (6): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (7): ELU(alpha=1.0)
+        (8): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (9): ELU(alpha=1.0)
+      )
+      (output_layer): Conv1d(100, 10, kernel_size=(1,), stride=(1,))
+    )
+    (inner_encoder): CNNBlock(
+      (conv_layers): Sequential(
+        (0): Conv1d(10, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (1): ELU(alpha=1.0)
+        (2): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (3): ELU(alpha=1.0)
+        (4): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (5): ELU(alpha=1.0)
+        (6): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (7): ELU(alpha=1.0)
+        (8): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+        (9): ELU(alpha=1.0)
+      )
+      (output_layer): Conv1d(100, 2, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (decoder): Decoder(
+    (eq_block_list): ModuleList(
+      (0-5): 6 x EqualizerCNNBlock(
+        (cnn_block1): CNNBlock(
+          (conv_layers): Sequential(
+            (0): Conv1d(12, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (1): ELU(alpha=1.0)
+            (2): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (3): ELU(alpha=1.0)
+            (4): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (5): ELU(alpha=1.0)
+            (6): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (7): ELU(alpha=1.0)
+            (8): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (9): ELU(alpha=1.0)
+          )
+          (output_layer): Conv1d(100, 10, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (dec_block_list): ModuleList(
+      (0-5): 6 x DecoderCNNBlock(
+        (cnn_block1): CNNBlock(
+          (conv_layers): Sequential(
+            (0): Conv1d(10, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (1): ELU(alpha=1.0)
+            (2): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (3): ELU(alpha=1.0)
+            (4): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (5): ELU(alpha=1.0)
+            (6): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (7): ELU(alpha=1.0)
+            (8): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+            (9): ELU(alpha=1.0)
+          )
+          (output_layer): Conv1d(100, 10, kernel_size=(1,), stride=(1,))
+        )
+        (cnn_block2): Conv1d(10, 10, kernel_size=(1,), stride=(1,), padding=same)
+      )
+    )
+    (dec_last_block): DecoderCNNLastBlock(
+      (cnn_block1): CNNBlock(
+        (conv_layers): Sequential(
+          (0): Conv1d(10, 100, kernel_size=(5,), stride=(1,), padding=same)
+          (1): ELU(alpha=1.0)
+          (2): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+          (3): ELU(alpha=1.0)
+          (4): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+          (5): ELU(alpha=1.0)
+          (6): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+          (7): ELU(alpha=1.0)
+          (8): Conv1d(100, 100, kernel_size=(5,), stride=(1,), padding=same)
+          (9): ELU(alpha=1.0)
+        )
+        (output_layer): Conv1d(100, 10, kernel_size=(1,), stride=(1,))
+      )
+      (flatten): Flatten(start_dim=1, end_dim=-1)
+      (decoder_ouput): Linear(in_features=640, out_features=64, bias=True)
+      (sigmoid): Sigmoid()
+    )
+  )
+)
+Number of total parameters:     3140026
+Number of trainable parameters: 3140026
+Starting TurboAE training over AWGN
+/apps/Arch/software/PyTorch/2.1.2-foss-2023a-CUDA-12.1.1/lib/python3.11/site-packages/torch/autograd/__init__.py:251: UserWarning: Grad strides do not match bucket view strides. This may indicate grad was not created according to the gradient layout contract, or that the param's strides changed since DDP was constructed.  This is not an error, but may impair performance.
+grad.sizes() = [100, 1, 5], strides() = [5, 1, 1]
+bucket_view.sizes() = [100, 1, 5], strides() = [5, 5, 1] (Triggered internally at /dev/shm/PyTorch/2.1.2/foss-2023a-CUDA-12.1.1/pytorch-v2.1.2/torch/csrc/distributed/c10d/reducer.cpp:320.)
+  Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Epoch:  1/800 | Train loss:   0.493634 | Val. loss:   0.333483 | Val. BER (4.0 dB):   0.145813 | Val. BLER (4.0 dB):   1.000000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  2/800 | Train loss:   0.261615 | Val. loss:   0.190484 | Val. BER (4.0 dB):   0.076063 | Val. BLER (4.0 dB):   0.990000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  3/800 | Train loss:   0.199502 | Val. loss:   0.139407 | Val. BER (4.0 dB):   0.052156 | Val. BLER (4.0 dB):   0.976000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  4/800 | Train loss:   0.175232 | Val. loss:   0.118110 | Val. BER (4.0 dB):   0.042313 | Val. BLER (4.0 dB):   0.920000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  5/800 | Train loss:   0.162893 | Val. loss:   0.107810 | Val. BER (4.0 dB):   0.038469 | Val. BLER (4.0 dB):   0.916000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  6/800 | Train loss:   0.153657 | Val. loss:   0.097849 | Val. BER (4.0 dB):   0.034625 | Val. BLER (4.0 dB):   0.888000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  7/800 | Train loss:   0.147868 | Val. loss:   0.093713 | Val. BER (4.0 dB):   0.031781 | Val. BLER (4.0 dB):   0.858000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  8/800 | Train loss:   0.141669 | Val. loss:   0.091357 | Val. BER (4.0 dB):   0.031469 | Val. BLER (4.0 dB):   0.848000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch:  9/800 | Train loss:   0.137606 | Val. loss:   0.084004 | Val. BER (4.0 dB):   0.029125 | Val. BLER (4.0 dB):   0.842000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 10/800 | Train loss:   0.133401 | Val. loss:   0.078666 | Val. BER (4.0 dB):   0.026719 | Val. BLER (4.0 dB):   0.832000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 11/800 | Train loss:   0.133336 | Val. loss:   0.080188 | Val. BER (4.0 dB):   0.027375 | Val. BLER (4.0 dB):   0.816000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 12/800 | Train loss:   0.132404 | Val. loss:   0.078807 | Val. BER (4.0 dB):   0.026781 | Val. BLER (4.0 dB):   0.828000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 13/800 | Train loss:   0.128703 | Val. loss:   0.074582 | Val. BER (4.0 dB):   0.025438 | Val. BLER (4.0 dB):   0.812000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 14/800 | Train loss:   0.129016 | Val. loss:   0.079329 | Val. BER (4.0 dB):   0.027906 | Val. BLER (4.0 dB):   0.832000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 15/800 | Train loss:   0.128760 | Val. loss:   0.076206 | Val. BER (4.0 dB):   0.026000 | Val. BLER (4.0 dB):   0.806000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 16/800 | Train loss:   0.128361 | Val. loss:   0.077314 | Val. BER (4.0 dB):   0.026656 | Val. BLER (4.0 dB):   0.802000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 17/800 | Train loss:   0.123546 | Val. loss:   0.070642 | Val. BER (4.0 dB):   0.024969 | Val. BLER (4.0 dB):   0.786000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 18/800 | Train loss:   0.121413 | Val. loss:   0.069123 | Val. BER (4.0 dB):   0.022875 | Val. BLER (4.0 dB):   0.748000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 19/800 | Train loss:   0.120518 | Val. loss:   0.069389 | Val. BER (4.0 dB):   0.022125 | Val. BLER (4.0 dB):   0.772000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 20/800 | Train loss:   0.116724 | Val. loss:   0.065230 | Val. BER (4.0 dB):   0.021187 | Val. BLER (4.0 dB):   0.756000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 21/800 | Train loss:   0.115606 | Val. loss:   0.065893 | Val. BER (4.0 dB):   0.021500 | Val. BLER (4.0 dB):   0.738000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 22/800 | Train loss:   0.112098 | Val. loss:   0.061592 | Val. BER (4.0 dB):   0.020094 | Val. BLER (4.0 dB):   0.752000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 23/800 | Train loss:   0.111030 | Val. loss:   0.060066 | Val. BER (4.0 dB):   0.019781 | Val. BLER (4.0 dB):   0.706000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 24/800 | Train loss:   0.110404 | Val. loss:   0.059559 | Val. BER (4.0 dB):   0.019625 | Val. BLER (4.0 dB):   0.702000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 25/800 | Train loss:   0.107463 | Val. loss:   0.057395 | Val. BER (4.0 dB):   0.018687 | Val. BLER (4.0 dB):   0.696000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 26/800 | Train loss:   0.106863 | Val. loss:   0.058521 | Val. BER (4.0 dB):   0.018750 | Val. BLER (4.0 dB):   0.692000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 27/800 | Train loss:   0.106203 | Val. loss:   0.058354 | Val. BER (4.0 dB):   0.018937 | Val. BLER (4.0 dB):   0.696000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 28/800 | Train loss:   0.108462 | Val. loss:   0.055920 | Val. BER (4.0 dB):   0.018469 | Val. BLER (4.0 dB):   0.700000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 29/800 | Train loss:   0.103233 | Val. loss:   0.051768 | Val. BER (4.0 dB):   0.016750 | Val. BLER (4.0 dB):   0.646000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 30/800 | Train loss:   0.102350 | Val. loss:   0.053088 | Val. BER (4.0 dB):   0.017219 | Val. BLER (4.0 dB):   0.652000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 31/800 | Train loss:   0.103457 | Val. loss:   0.050576 | Val. BER (4.0 dB):   0.016125 | Val. BLER (4.0 dB):   0.642000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 32/800 | Train loss:   0.102540 | Val. loss:   0.053043 | Val. BER (4.0 dB):   0.017156 | Val. BLER (4.0 dB):   0.656000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 33/800 | Train loss:   0.102501 | Val. loss:   0.052816 | Val. BER (4.0 dB):   0.017875 | Val. BLER (4.0 dB):   0.682000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 34/800 | Train loss:   0.101399 | Val. loss:   0.049334 | Val. BER (4.0 dB):   0.015781 | Val. BLER (4.0 dB):   0.638000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 35/800 | Train loss:   0.099818 | Val. loss:   0.050457 | Val. BER (4.0 dB):   0.016344 | Val. BLER (4.0 dB):   0.698000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 36/800 | Train loss:   0.098981 | Val. loss:   0.049754 | Val. BER (4.0 dB):   0.016000 | Val. BLER (4.0 dB):   0.648000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 37/800 | Train loss:   0.098859 | Val. loss:   0.052485 | Val. BER (4.0 dB):   0.017406 | Val. BLER (4.0 dB):   0.658000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 38/800 | Train loss:   0.098392 | Val. loss:   0.050443 | Val. BER (4.0 dB):   0.017063 | Val. BLER (4.0 dB):   0.670000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 39/800 | Train loss:   0.097669 | Val. loss:   0.049682 | Val. BER (4.0 dB):   0.016031 | Val. BLER (4.0 dB):   0.642000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 40/800 | Train loss:   0.096748 | Val. loss:   0.047880 | Val. BER (4.0 dB):   0.015656 | Val. BLER (4.0 dB):   0.638000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 41/800 | Train loss:   0.097706 | Val. loss:   0.049658 | Val. BER (4.0 dB):   0.015875 | Val. BLER (4.0 dB):   0.656000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 42/800 | Train loss:   0.097993 | Val. loss:   0.049115 | Val. BER (4.0 dB):   0.016000 | Val. BLER (4.0 dB):   0.634000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 43/800 | Train loss:   0.096851 | Val. loss:   0.047479 | Val. BER (4.0 dB):   0.015656 | Val. BLER (4.0 dB):   0.628000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 44/800 | Train loss:   0.094989 | Val. loss:   0.046623 | Val. BER (4.0 dB):   0.013938 | Val. BLER (4.0 dB):   0.594000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 45/800 | Train loss:   0.094545 | Val. loss:   0.046039 | Val. BER (4.0 dB):   0.014063 | Val. BLER (4.0 dB):   0.572000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 46/800 | Train loss:   0.094591 | Val. loss:   0.046784 | Val. BER (4.0 dB):   0.015219 | Val. BLER (4.0 dB):   0.600000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 47/800 | Train loss:   0.094577 | Val. loss:   0.046222 | Val. BER (4.0 dB):   0.014531 | Val. BLER (4.0 dB):   0.608000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 48/800 | Train loss:   0.093878 | Val. loss:   0.045103 | Val. BER (4.0 dB):   0.014812 | Val. BLER (4.0 dB):   0.620000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 49/800 | Train loss:   0.093094 | Val. loss:   0.044918 | Val. BER (4.0 dB):   0.014750 | Val. BLER (4.0 dB):   0.594000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 50/800 | Train loss:   0.093199 | Val. loss:   0.044552 | Val. BER (4.0 dB):   0.013719 | Val. BLER (4.0 dB):   0.596000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 51/800 | Train loss:   0.093337 | Val. loss:   0.047542 | Val. BER (4.0 dB):   0.014656 | Val. BLER (4.0 dB):   0.602000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 52/800 | Train loss:   0.092522 | Val. loss:   0.045619 | Val. BER (4.0 dB):   0.014594 | Val. BLER (4.0 dB):   0.606000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 53/800 | Train loss:   0.092839 | Val. loss:   0.044559 | Val. BER (4.0 dB):   0.014250 | Val. BLER (4.0 dB):   0.596000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 54/800 | Train loss:   0.093000 | Val. loss:   0.041574 | Val. BER (4.0 dB):   0.012438 | Val. BLER (4.0 dB):   0.558000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 55/800 | Train loss:   0.092927 | Val. loss:   0.044260 | Val. BER (4.0 dB):   0.013781 | Val. BLER (4.0 dB):   0.564000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 56/800 | Train loss:   0.092837 | Val. loss:   0.044243 | Val. BER (4.0 dB):   0.013688 | Val. BLER (4.0 dB):   0.584000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 57/800 | Train loss:   0.091771 | Val. loss:   0.044197 | Val. BER (4.0 dB):   0.014937 | Val. BLER (4.0 dB):   0.588000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 58/800 | Train loss:   0.091353 | Val. loss:   0.044143 | Val. BER (4.0 dB):   0.013562 | Val. BLER (4.0 dB):   0.578000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 59/800 | Train loss:   0.091621 | Val. loss:   0.045022 | Val. BER (4.0 dB):   0.014031 | Val. BLER (4.0 dB):   0.604000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 60/800 | Train loss:   0.090431 | Val. loss:   0.041425 | Val. BER (4.0 dB):   0.012625 | Val. BLER (4.0 dB):   0.554000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 61/800 | Train loss:   0.088909 | Val. loss:   0.040332 | Val. BER (4.0 dB):   0.012406 | Val. BLER (4.0 dB):   0.576000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 62/800 | Train loss:   0.084728 | Val. loss:   0.037009 | Val. BER (4.0 dB):   0.012063 | Val. BLER (4.0 dB):   0.532000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 63/800 | Train loss:   0.079199 | Val. loss:   0.033834 | Val. BER (4.0 dB):   0.010281 | Val. BLER (4.0 dB):   0.464000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 64/800 | Train loss:   0.075214 | Val. loss:   0.026481 | Val. BER (4.0 dB):   0.008313 | Val. BLER (4.0 dB):   0.388000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 65/800 | Train loss:   0.072253 | Val. loss:   0.028222 | Val. BER (4.0 dB):   0.008281 | Val. BLER (4.0 dB):   0.396000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 66/800 | Train loss:   0.070583 | Val. loss:   0.027407 | Val. BER (4.0 dB):   0.008219 | Val. BLER (4.0 dB):   0.392000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 67/800 | Train loss:   0.069768 | Val. loss:   0.024341 | Val. BER (4.0 dB):   0.006469 | Val. BLER (4.0 dB):   0.298000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 68/800 | Train loss:   0.068593 | Val. loss:   0.025357 | Val. BER (4.0 dB):   0.008156 | Val. BLER (4.0 dB):   0.360000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 69/800 | Train loss:   0.067870 | Val. loss:   0.026855 | Val. BER (4.0 dB):   0.008250 | Val. BLER (4.0 dB):   0.346000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 70/800 | Train loss:   0.066944 | Val. loss:   0.022401 | Val. BER (4.0 dB):   0.006969 | Val. BLER (4.0 dB):   0.340000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 71/800 | Train loss:   0.067649 | Val. loss:   0.023213 | Val. BER (4.0 dB):   0.007344 | Val. BLER (4.0 dB):   0.328000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 72/800 | Train loss:   0.066403 | Val. loss:   0.020836 | Val. BER (4.0 dB):   0.006562 | Val. BLER (4.0 dB):   0.296000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 73/800 | Train loss:   0.066488 | Val. loss:   0.022049 | Val. BER (4.0 dB):   0.006469 | Val. BLER (4.0 dB):   0.302000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 74/800 | Train loss:   0.066010 | Val. loss:   0.021028 | Val. BER (4.0 dB):   0.006438 | Val. BLER (4.0 dB):   0.298000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 75/800 | Train loss:   0.065532 | Val. loss:   0.021092 | Val. BER (4.0 dB):   0.005750 | Val. BLER (4.0 dB):   0.252000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 76/800 | Train loss:   0.065626 | Val. loss:   0.020220 | Val. BER (4.0 dB):   0.005562 | Val. BLER (4.0 dB):   0.280000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 77/800 | Train loss:   0.065608 | Val. loss:   0.020405 | Val. BER (4.0 dB):   0.005812 | Val. BLER (4.0 dB):   0.256000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 78/800 | Train loss:   0.065758 | Val. loss:   0.021053 | Val. BER (4.0 dB):   0.006562 | Val. BLER (4.0 dB):   0.288000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 79/800 | Train loss:   0.065155 | Val. loss:   0.019431 | Val. BER (4.0 dB):   0.005187 | Val. BLER (4.0 dB):   0.238000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 80/800 | Train loss:   0.065319 | Val. loss:   0.019931 | Val. BER (4.0 dB):   0.005437 | Val. BLER (4.0 dB):   0.256000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 81/800 | Train loss:   0.065163 | Val. loss:   0.022559 | Val. BER (4.0 dB):   0.006438 | Val. BLER (4.0 dB):   0.274000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 82/800 | Train loss:   0.065689 | Val. loss:   0.019083 | Val. BER (4.0 dB):   0.005875 | Val. BLER (4.0 dB):   0.256000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 83/800 | Train loss:   0.065556 | Val. loss:   0.019096 | Val. BER (4.0 dB):   0.005500 | Val. BLER (4.0 dB):   0.254000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 84/800 | Train loss:   0.064949 | Val. loss:   0.019968 | Val. BER (4.0 dB):   0.005875 | Val. BLER (4.0 dB):   0.272000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 85/800 | Train loss:   0.065320 | Val. loss:   0.018850 | Val. BER (4.0 dB):   0.005406 | Val. BLER (4.0 dB):   0.272000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 86/800 | Train loss:   0.064331 | Val. loss:   0.021091 | Val. BER (4.0 dB):   0.006375 | Val. BLER (4.0 dB):   0.272000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 87/800 | Train loss:   0.064856 | Val. loss:   0.021265 | Val. BER (4.0 dB):   0.006500 | Val. BLER (4.0 dB):   0.288000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 88/800 | Train loss:   0.065064 | Val. loss:   0.019261 | Val. BER (4.0 dB):   0.005437 | Val. BLER (4.0 dB):   0.256000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 89/800 | Train loss:   0.064804 | Val. loss:   0.018443 | Val. BER (4.0 dB):   0.005500 | Val. BLER (4.0 dB):   0.248000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 90/800 | Train loss:   0.064853 | Val. loss:   0.019091 | Val. BER (4.0 dB):   0.005906 | Val. BLER (4.0 dB):   0.268000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 91/800 | Train loss:   0.063583 | Val. loss:   0.019572 | Val. BER (4.0 dB):   0.005281 | Val. BLER (4.0 dB):   0.244000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 92/800 | Train loss:   0.064070 | Val. loss:   0.019928 | Val. BER (4.0 dB):   0.005312 | Val. BLER (4.0 dB):   0.222000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 93/800 | Train loss:   0.064065 | Val. loss:   0.018593 | Val. BER (4.0 dB):   0.005188 | Val. BLER (4.0 dB):   0.240000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 94/800 | Train loss:   0.064116 | Val. loss:   0.019641 | Val. BER (4.0 dB):   0.006000 | Val. BLER (4.0 dB):   0.256000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 95/800 | Train loss:   0.064372 | Val. loss:   0.019260 | Val. BER (4.0 dB):   0.005781 | Val. BLER (4.0 dB):   0.258000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 96/800 | Train loss:   0.063916 | Val. loss:   0.020920 | Val. BER (4.0 dB):   0.007188 | Val. BLER (4.0 dB):   0.302000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 97/800 | Train loss:   0.064145 | Val. loss:   0.018659 | Val. BER (4.0 dB):   0.005938 | Val. BLER (4.0 dB):   0.268000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 98/800 | Train loss:   0.063876 | Val. loss:   0.018999 | Val. BER (4.0 dB):   0.005031 | Val. BLER (4.0 dB):   0.230000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 99/800 | Train loss:   0.063623 | Val. loss:   0.018856 | Val. BER (4.0 dB):   0.005437 | Val. BLER (4.0 dB):   0.234000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 100/800 | Train loss:   0.063843 | Val. loss:   0.020471 | Val. BER (4.0 dB):   0.006937 | Val. BLER (4.0 dB):   0.282000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 101/800 | Train loss:   0.063339 | Val. loss:   0.019616 | Val. BER (4.0 dB):   0.005938 | Val. BLER (4.0 dB):   0.262000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 102/800 | Train loss:   0.063388 | Val. loss:   0.017632 | Val. BER (4.0 dB):   0.005219 | Val. BLER (4.0 dB):   0.224000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 103/800 | Train loss:   0.062888 | Val. loss:   0.017799 | Val. BER (4.0 dB):   0.004969 | Val. BLER (4.0 dB):   0.228000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 104/800 | Train loss:   0.063091 | Val. loss:   0.018587 | Val. BER (4.0 dB):   0.005500 | Val. BLER (4.0 dB):   0.262000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 105/800 | Train loss:   0.062806 | Val. loss:   0.017523 | Val. BER (4.0 dB):   0.005312 | Val. BLER (4.0 dB):   0.244000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 106/800 | Train loss:   0.064015 | Val. loss:   0.017693 | Val. BER (4.0 dB):   0.004625 | Val. BLER (4.0 dB):   0.236000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 107/800 | Train loss:   0.063384 | Val. loss:   0.018271 | Val. BER (4.0 dB):   0.004906 | Val. BLER (4.0 dB):   0.222000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 108/800 | Train loss:   0.062333 | Val. loss:   0.017059 | Val. BER (4.0 dB):   0.005031 | Val. BLER (4.0 dB):   0.228000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 109/800 | Train loss:   0.061961 | Val. loss:   0.017166 | Val. BER (4.0 dB):   0.004844 | Val. BLER (4.0 dB):   0.230000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 110/800 | Train loss:   0.061978 | Val. loss:   0.016324 | Val. BER (4.0 dB):   0.004438 | Val. BLER (4.0 dB):   0.212000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 111/800 | Train loss:   0.061059 | Val. loss:   0.015161 | Val. BER (4.0 dB):   0.003969 | Val. BLER (4.0 dB):   0.190000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 112/800 | Train loss:   0.061241 | Val. loss:   0.016536 | Val. BER (4.0 dB):   0.004844 | Val. BLER (4.0 dB):   0.212000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 113/800 | Train loss:   0.061432 | Val. loss:   0.015918 | Val. BER (4.0 dB):   0.005094 | Val. BLER (4.0 dB):   0.220000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 114/800 | Train loss:   0.061677 | Val. loss:   0.015368 | Val. BER (4.0 dB):   0.004313 | Val. BLER (4.0 dB):   0.212000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 115/800 | Train loss:   0.060225 | Val. loss:   0.014087 | Val. BER (4.0 dB):   0.003875 | Val. BLER (4.0 dB):   0.196000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 116/800 | Train loss:   0.060153 | Val. loss:   0.014621 | Val. BER (4.0 dB):   0.004344 | Val. BLER (4.0 dB):   0.210000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 117/800 | Train loss:   0.058846 | Val. loss:   0.014865 | Val. BER (4.0 dB):   0.004469 | Val. BLER (4.0 dB):   0.224000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 118/800 | Train loss:   0.059657 | Val. loss:   0.012861 | Val. BER (4.0 dB):   0.003562 | Val. BLER (4.0 dB):   0.168000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 119/800 | Train loss:   0.057532 | Val. loss:   0.012579 | Val. BER (4.0 dB):   0.003531 | Val. BLER (4.0 dB):   0.180000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 120/800 | Train loss:   0.058283 | Val. loss:   0.013738 | Val. BER (4.0 dB):   0.004313 | Val. BLER (4.0 dB):   0.186000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 121/800 | Train loss:   0.058384 | Val. loss:   0.012562 | Val. BER (4.0 dB):   0.003656 | Val. BLER (4.0 dB):   0.172000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 122/800 | Train loss:   0.057759 | Val. loss:   0.010313 | Val. BER (4.0 dB):   0.002875 | Val. BLER (4.0 dB):   0.140000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 123/800 | Train loss:   0.057227 | Val. loss:   0.014416 | Val. BER (4.0 dB):   0.004938 | Val. BLER (4.0 dB):   0.200000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 124/800 | Train loss:   0.056782 | Val. loss:   0.011551 | Val. BER (4.0 dB):   0.003625 | Val. BLER (4.0 dB):   0.160000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 125/800 | Train loss:   0.057025 | Val. loss:   0.011994 | Val. BER (4.0 dB):   0.003250 | Val. BLER (4.0 dB):   0.156000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 126/800 | Train loss:   0.056270 | Val. loss:   0.011881 | Val. BER (4.0 dB):   0.004094 | Val. BLER (4.0 dB):   0.190000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 127/800 | Train loss:   0.055406 | Val. loss:   0.012539 | Val. BER (4.0 dB):   0.003719 | Val. BLER (4.0 dB):   0.172000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 128/800 | Train loss:   0.055776 | Val. loss:   0.011242 | Val. BER (4.0 dB):   0.003344 | Val. BLER (4.0 dB):   0.152000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 129/800 | Train loss:   0.055928 | Val. loss:   0.009290 | Val. BER (4.0 dB):   0.002344 | Val. BLER (4.0 dB):   0.114000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 130/800 | Train loss:   0.055858 | Val. loss:   0.011531 | Val. BER (4.0 dB):   0.003500 | Val. BLER (4.0 dB):   0.140000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 131/800 | Train loss:   0.055920 | Val. loss:   0.009415 | Val. BER (4.0 dB):   0.003031 | Val. BLER (4.0 dB):   0.136000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 132/800 | Train loss:   0.056476 | Val. loss:   0.011438 | Val. BER (4.0 dB):   0.003406 | Val. BLER (4.0 dB):   0.138000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 133/800 | Train loss:   0.055456 | Val. loss:   0.010085 | Val. BER (4.0 dB):   0.003281 | Val. BLER (4.0 dB):   0.140000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 134/800 | Train loss:   0.055408 | Val. loss:   0.010206 | Val. BER (4.0 dB):   0.002906 | Val. BLER (4.0 dB):   0.126000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 135/800 | Train loss:   0.055170 | Val. loss:   0.009173 | Val. BER (4.0 dB):   0.002938 | Val. BLER (4.0 dB):   0.136000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 136/800 | Train loss:   0.055123 | Val. loss:   0.012435 | Val. BER (4.0 dB):   0.003750 | Val. BLER (4.0 dB):   0.138000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 137/800 | Train loss:   0.055759 | Val. loss:   0.008665 | Val. BER (4.0 dB):   0.002469 | Val. BLER (4.0 dB):   0.116000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 138/800 | Train loss:   0.055550 | Val. loss:   0.009323 | Val. BER (4.0 dB):   0.002719 | Val. BLER (4.0 dB):   0.144000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 139/800 | Train loss:   0.056457 | Val. loss:   0.009464 | Val. BER (4.0 dB):   0.002750 | Val. BLER (4.0 dB):   0.118000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 140/800 | Train loss:   0.054425 | Val. loss:   0.007741 | Val. BER (4.0 dB):   0.002344 | Val. BLER (4.0 dB):   0.102000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 141/800 | Train loss:   0.056688 | Val. loss:   0.007975 | Val. BER (4.0 dB):   0.002344 | Val. BLER (4.0 dB):   0.102000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 142/800 | Train loss:   0.056905 | Val. loss:   0.008312 | Val. BER (4.0 dB):   0.002969 | Val. BLER (4.0 dB):   0.130000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 143/800 | Train loss:   0.055010 | Val. loss:   0.008054 | Val. BER (4.0 dB):   0.002562 | Val. BLER (4.0 dB):   0.110000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 144/800 | Train loss:   0.056002 | Val. loss:   0.009951 | Val. BER (4.0 dB):   0.003250 | Val. BLER (4.0 dB):   0.138000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 145/800 | Train loss:   0.054510 | Val. loss:   0.008729 | Val. BER (4.0 dB):   0.002656 | Val. BLER (4.0 dB):   0.116000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 146/800 | Train loss:   0.053821 | Val. loss:   0.008319 | Val. BER (4.0 dB):   0.002281 | Val. BLER (4.0 dB):   0.096000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 147/800 | Train loss:   0.055636 | Val. loss:   0.005785 | Val. BER (4.0 dB):   0.001469 | Val. BLER (4.0 dB):   0.080000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 148/800 | Train loss:   0.054805 | Val. loss:   0.008862 | Val. BER (4.0 dB):   0.002625 | Val. BLER (4.0 dB):   0.104000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 149/800 | Train loss:   0.054689 | Val. loss:   0.009248 | Val. BER (4.0 dB):   0.002625 | Val. BLER (4.0 dB):   0.096000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 150/800 | Train loss:   0.054187 | Val. loss:   0.006292 | Val. BER (4.0 dB):   0.001813 | Val. BLER (4.0 dB):   0.076000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 151/800 | Train loss:   0.054942 | Val. loss:   0.006671 | Val. BER (4.0 dB):   0.001625 | Val. BLER (4.0 dB):   0.066000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 152/800 | Train loss:   0.054859 | Val. loss:   0.007312 | Val. BER (4.0 dB):   0.002313 | Val. BLER (4.0 dB):   0.092000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 153/800 | Train loss:   0.054880 | Val. loss:   0.008874 | Val. BER (4.0 dB):   0.002375 | Val. BLER (4.0 dB):   0.108000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 154/800 | Train loss:   0.052568 | Val. loss:   0.006917 | Val. BER (4.0 dB):   0.001719 | Val. BLER (4.0 dB):   0.078000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 155/800 | Train loss:   0.054146 | Val. loss:   0.007157 | Val. BER (4.0 dB):   0.002250 | Val. BLER (4.0 dB):   0.082000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 156/800 | Train loss:   0.053451 | Val. loss:   0.007071 | Val. BER (4.0 dB):   0.002156 | Val. BLER (4.0 dB):   0.086000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 157/800 | Train loss:   0.052714 | Val. loss:   0.006387 | Val. BER (4.0 dB):   0.001750 | Val. BLER (4.0 dB):   0.084000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 158/800 | Train loss:   0.052708 | Val. loss:   0.006132 | Val. BER (4.0 dB):   0.001781 | Val. BLER (4.0 dB):   0.086000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 159/800 | Train loss:   0.053777 | Val. loss:   0.007629 | Val. BER (4.0 dB):   0.002469 | Val. BLER (4.0 dB):   0.102000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 160/800 | Train loss:   0.053451 | Val. loss:   0.007498 | Val. BER (4.0 dB):   0.002250 | Val. BLER (4.0 dB):   0.086000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 161/800 | Train loss:   0.054768 | Val. loss:   0.007485 | Val. BER (4.0 dB):   0.002531 | Val. BLER (4.0 dB):   0.082000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 162/800 | Train loss:   0.055325 | Val. loss:   0.006579 | Val. BER (4.0 dB):   0.001687 | Val. BLER (4.0 dB):   0.070000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 163/800 | Train loss:   0.052993 | Val. loss:   0.006939 | Val. BER (4.0 dB):   0.002125 | Val. BLER (4.0 dB):   0.078000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 164/800 | Train loss:   0.054071 | Val. loss:   0.007106 | Val. BER (4.0 dB):   0.002375 | Val. BLER (4.0 dB):   0.094000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 165/800 | Train loss:   0.055066 | Val. loss:   0.005608 | Val. BER (4.0 dB):   0.001625 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 166/800 | Train loss:   0.054070 | Val. loss:   0.005961 | Val. BER (4.0 dB):   0.001844 | Val. BLER (4.0 dB):   0.070000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 167/800 | Train loss:   0.053628 | Val. loss:   0.005585 | Val. BER (4.0 dB):   0.001594 | Val. BLER (4.0 dB):   0.090000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 168/800 | Train loss:   0.053840 | Val. loss:   0.005789 | Val. BER (4.0 dB):   0.001406 | Val. BLER (4.0 dB):   0.066000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 169/800 | Train loss:   0.053402 | Val. loss:   0.004983 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 170/800 | Train loss:   0.052412 | Val. loss:   0.006133 | Val. BER (4.0 dB):   0.001844 | Val. BLER (4.0 dB):   0.066000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 171/800 | Train loss:   0.054375 | Val. loss:   0.004901 | Val. BER (4.0 dB):   0.001312 | Val. BLER (4.0 dB):   0.070000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 172/800 | Train loss:   0.053440 | Val. loss:   0.005950 | Val. BER (4.0 dB):   0.001687 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 173/800 | Train loss:   0.054846 | Val. loss:   0.006641 | Val. BER (4.0 dB):   0.002000 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 174/800 | Train loss:   0.056031 | Val. loss:   0.005468 | Val. BER (4.0 dB):   0.001406 | Val. BLER (4.0 dB):   0.054000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 175/800 | Train loss:   0.054170 | Val. loss:   0.007270 | Val. BER (4.0 dB):   0.002313 | Val. BLER (4.0 dB):   0.084000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 176/800 | Train loss:   0.056558 | Val. loss:   0.006982 | Val. BER (4.0 dB):   0.002031 | Val. BLER (4.0 dB):   0.074000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 177/800 | Train loss:   0.055625 | Val. loss:   0.005101 | Val. BER (4.0 dB):   0.001656 | Val. BLER (4.0 dB):   0.060000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 178/800 | Train loss:   0.054017 | Val. loss:   0.006091 | Val. BER (4.0 dB):   0.001812 | Val. BLER (4.0 dB):   0.070000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 179/800 | Train loss:   0.055744 | Val. loss:   0.005505 | Val. BER (4.0 dB):   0.001469 | Val. BLER (4.0 dB):   0.072000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 180/800 | Train loss:   0.054370 | Val. loss:   0.006179 | Val. BER (4.0 dB):   0.001844 | Val. BLER (4.0 dB):   0.072000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 181/800 | Train loss:   0.053263 | Val. loss:   0.006995 | Val. BER (4.0 dB):   0.002094 | Val. BLER (4.0 dB):   0.070000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 182/800 | Train loss:   0.053701 | Val. loss:   0.005529 | Val. BER (4.0 dB):   0.001281 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 183/800 | Train loss:   0.053678 | Val. loss:   0.006363 | Val. BER (4.0 dB):   0.002031 | Val. BLER (4.0 dB):   0.072000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 184/800 | Train loss:   0.052601 | Val. loss:   0.007038 | Val. BER (4.0 dB):   0.002031 | Val. BLER (4.0 dB):   0.062000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 185/800 | Train loss:   0.052356 | Val. loss:   0.004990 | Val. BER (4.0 dB):   0.001313 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 186/800 | Train loss:   0.050898 | Val. loss:   0.004548 | Val. BER (4.0 dB):   0.001563 | Val. BLER (4.0 dB):   0.050000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 187/800 | Train loss:   0.052038 | Val. loss:   0.005431 | Val. BER (4.0 dB):   0.001531 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 188/800 | Train loss:   0.052934 | Val. loss:   0.004101 | Val. BER (4.0 dB):   0.001094 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 189/800 | Train loss:   0.052818 | Val. loss:   0.004940 | Val. BER (4.0 dB):   0.001406 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 190/800 | Train loss:   0.052501 | Val. loss:   0.004832 | Val. BER (4.0 dB):   0.001250 | Val. BLER (4.0 dB):   0.058000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 191/800 | Train loss:   0.053503 | Val. loss:   0.005288 | Val. BER (4.0 dB):   0.001781 | Val. BLER (4.0 dB):   0.072000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 192/800 | Train loss:   0.052346 | Val. loss:   0.005201 | Val. BER (4.0 dB):   0.001281 | Val. BLER (4.0 dB):   0.062000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 193/800 | Train loss:   0.050622 | Val. loss:   0.004770 | Val. BER (4.0 dB):   0.001469 | Val. BLER (4.0 dB):   0.054000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 194/800 | Train loss:   0.052786 | Val. loss:   0.006191 | Val. BER (4.0 dB):   0.001812 | Val. BLER (4.0 dB):   0.060000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 195/800 | Train loss:   0.053042 | Val. loss:   0.004695 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.052000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 196/800 | Train loss:   0.054772 | Val. loss:   0.006356 | Val. BER (4.0 dB):   0.001625 | Val. BLER (4.0 dB):   0.078000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 197/800 | Train loss:   0.052274 | Val. loss:   0.004044 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 198/800 | Train loss:   0.052523 | Val. loss:   0.004370 | Val. BER (4.0 dB):   0.001219 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 199/800 | Train loss:   0.051695 | Val. loss:   0.005371 | Val. BER (4.0 dB):   0.001531 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 200/800 | Train loss:   0.051605 | Val. loss:   0.004650 | Val. BER (4.0 dB):   0.001313 | Val. BLER (4.0 dB):   0.060000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 201/800 | Train loss:   0.051603 | Val. loss:   0.004511 | Val. BER (4.0 dB):   0.001375 | Val. BLER (4.0 dB):   0.050000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 202/800 | Train loss:   0.053308 | Val. loss:   0.005146 | Val. BER (4.0 dB):   0.001563 | Val. BLER (4.0 dB):   0.062000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 203/800 | Train loss:   0.050732 | Val. loss:   0.003961 | Val. BER (4.0 dB):   0.001156 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 204/800 | Train loss:   0.051141 | Val. loss:   0.004430 | Val. BER (4.0 dB):   0.001469 | Val. BLER (4.0 dB):   0.068000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 205/800 | Train loss:   0.050673 | Val. loss:   0.005398 | Val. BER (4.0 dB):   0.001750 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 206/800 | Train loss:   0.048447 | Val. loss:   0.003813 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 207/800 | Train loss:   0.049803 | Val. loss:   0.005015 | Val. BER (4.0 dB):   0.001125 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 208/800 | Train loss:   0.049115 | Val. loss:   0.003474 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 209/800 | Train loss:   0.048490 | Val. loss:   0.003213 | Val. BER (4.0 dB):   0.000844 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 210/800 | Train loss:   0.049297 | Val. loss:   0.003457 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 211/800 | Train loss:   0.050381 | Val. loss:   0.003843 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.050000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 212/800 | Train loss:   0.048415 | Val. loss:   0.003069 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 213/800 | Train loss:   0.050386 | Val. loss:   0.004036 | Val. BER (4.0 dB):   0.001125 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 214/800 | Train loss:   0.049533 | Val. loss:   0.004689 | Val. BER (4.0 dB):   0.001406 | Val. BLER (4.0 dB):   0.060000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 215/800 | Train loss:   0.050389 | Val. loss:   0.003824 | Val. BER (4.0 dB):   0.001281 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 216/800 | Train loss:   0.048931 | Val. loss:   0.002868 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 217/800 | Train loss:   0.052501 | Val. loss:   0.003447 | Val. BER (4.0 dB):   0.001094 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 218/800 | Train loss:   0.050435 | Val. loss:   0.005003 | Val. BER (4.0 dB):   0.001500 | Val. BLER (4.0 dB):   0.056000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 219/800 | Train loss:   0.048572 | Val. loss:   0.002551 | Val. BER (4.0 dB):   0.000562 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 220/800 | Train loss:   0.048215 | Val. loss:   0.003491 | Val. BER (4.0 dB):   0.000813 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 221/800 | Train loss:   0.049429 | Val. loss:   0.004203 | Val. BER (4.0 dB):   0.001281 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 222/800 | Train loss:   0.051512 | Val. loss:   0.003551 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 223/800 | Train loss:   0.049390 | Val. loss:   0.004985 | Val. BER (4.0 dB):   0.001531 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 224/800 | Train loss:   0.051221 | Val. loss:   0.003837 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 225/800 | Train loss:   0.050393 | Val. loss:   0.003261 | Val. BER (4.0 dB):   0.000969 | Val. BLER (4.0 dB):   0.050000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 226/800 | Train loss:   0.049729 | Val. loss:   0.003209 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 227/800 | Train loss:   0.048955 | Val. loss:   0.006287 | Val. BER (4.0 dB):   0.002031 | Val. BLER (4.0 dB):   0.072000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 228/800 | Train loss:   0.047415 | Val. loss:   0.003888 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.048000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 229/800 | Train loss:   0.048231 | Val. loss:   0.003572 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 230/800 | Train loss:   0.049196 | Val. loss:   0.003388 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 231/800 | Train loss:   0.048486 | Val. loss:   0.003369 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 232/800 | Train loss:   0.049505 | Val. loss:   0.002810 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 233/800 | Train loss:   0.049184 | Val. loss:   0.003508 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 234/800 | Train loss:   0.049359 | Val. loss:   0.002389 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 235/800 | Train loss:   0.047628 | Val. loss:   0.002544 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 236/800 | Train loss:   0.048228 | Val. loss:   0.003898 | Val. BER (4.0 dB):   0.001219 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 237/800 | Train loss:   0.048314 | Val. loss:   0.002911 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 238/800 | Train loss:   0.047252 | Val. loss:   0.003499 | Val. BER (4.0 dB):   0.001219 | Val. BLER (4.0 dB):   0.046000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 239/800 | Train loss:   0.047401 | Val. loss:   0.002464 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 240/800 | Train loss:   0.047871 | Val. loss:   0.003155 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 241/800 | Train loss:   0.049875 | Val. loss:   0.002859 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 242/800 | Train loss:   0.051766 | Val. loss:   0.003779 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 243/800 | Train loss:   0.051001 | Val. loss:   0.004124 | Val. BER (4.0 dB):   0.001531 | Val. BLER (4.0 dB):   0.056000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 244/800 | Train loss:   0.050362 | Val. loss:   0.004804 | Val. BER (4.0 dB):   0.001187 | Val. BLER (4.0 dB):   0.048000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 245/800 | Train loss:   0.046942 | Val. loss:   0.003625 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 246/800 | Train loss:   0.048916 | Val. loss:   0.003486 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.036000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 247/800 | Train loss:   0.046870 | Val. loss:   0.003158 | Val. BER (4.0 dB):   0.000750 | Val. BLER (4.0 dB):   0.048000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 248/800 | Train loss:   0.045797 | Val. loss:   0.003544 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 249/800 | Train loss:   0.045246 | Val. loss:   0.005046 | Val. BER (4.0 dB):   0.001375 | Val. BLER (4.0 dB):   0.048000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 250/800 | Train loss:   0.046744 | Val. loss:   0.003087 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 251/800 | Train loss:   0.049961 | Val. loss:   0.003690 | Val. BER (4.0 dB):   0.001187 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 252/800 | Train loss:   0.052411 | Val. loss:   0.004408 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.036000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 253/800 | Train loss:   0.049720 | Val. loss:   0.003279 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.036000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 254/800 | Train loss:   0.051790 | Val. loss:   0.003540 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 255/800 | Train loss:   0.050000 | Val. loss:   0.004880 | Val. BER (4.0 dB):   0.001250 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 256/800 | Train loss:   0.049509 | Val. loss:   0.002945 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 257/800 | Train loss:   0.048060 | Val. loss:   0.003233 | Val. BER (4.0 dB):   0.000750 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 258/800 | Train loss:   0.048976 | Val. loss:   0.003381 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 259/800 | Train loss:   0.049092 | Val. loss:   0.003282 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.036000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 260/800 | Train loss:   0.047354 | Val. loss:   0.002828 | Val. BER (4.0 dB):   0.000562 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 261/800 | Train loss:   0.046442 | Val. loss:   0.002384 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 262/800 | Train loss:   0.047647 | Val. loss:   0.002090 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 263/800 | Train loss:   0.048038 | Val. loss:   0.003910 | Val. BER (4.0 dB):   0.001406 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 264/800 | Train loss:   0.046671 | Val. loss:   0.003548 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 265/800 | Train loss:   0.046923 | Val. loss:   0.002960 | Val. BER (4.0 dB):   0.000812 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 266/800 | Train loss:   0.044453 | Val. loss:   0.003369 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 267/800 | Train loss:   0.045476 | Val. loss:   0.004365 | Val. BER (4.0 dB):   0.001250 | Val. BLER (4.0 dB):   0.048000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 268/800 | Train loss:   0.043804 | Val. loss:   0.002653 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 269/800 | Train loss:   0.044268 | Val. loss:   0.003026 | Val. BER (4.0 dB):   0.000844 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 270/800 | Train loss:   0.043355 | Val. loss:   0.002255 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 271/800 | Train loss:   0.045336 | Val. loss:   0.002397 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 272/800 | Train loss:   0.045901 | Val. loss:   0.002709 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 273/800 | Train loss:   0.047091 | Val. loss:   0.002403 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 274/800 | Train loss:   0.051542 | Val. loss:   0.006080 | Val. BER (4.0 dB):   0.001281 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 275/800 | Train loss:   0.045694 | Val. loss:   0.003207 | Val. BER (4.0 dB):   0.000969 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 276/800 | Train loss:   0.042660 | Val. loss:   0.002258 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 277/800 | Train loss:   0.043496 | Val. loss:   0.002505 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 278/800 | Train loss:   0.042595 | Val. loss:   0.003324 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 279/800 | Train loss:   0.045289 | Val. loss:   0.002597 | Val. BER (4.0 dB):   0.000812 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 280/800 | Train loss:   0.045572 | Val. loss:   0.001910 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 281/800 | Train loss:   0.044750 | Val. loss:   0.002701 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 282/800 | Train loss:   0.046153 | Val. loss:   0.002629 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 283/800 | Train loss:   0.042542 | Val. loss:   0.001792 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 284/800 | Train loss:   0.044338 | Val. loss:   0.002447 | Val. BER (4.0 dB):   0.000562 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 285/800 | Train loss:   0.045166 | Val. loss:   0.002516 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 286/800 | Train loss:   0.044475 | Val. loss:   0.003067 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 287/800 | Train loss:   0.044511 | Val. loss:   0.002382 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 288/800 | Train loss:   0.046228 | Val. loss:   0.003269 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 289/800 | Train loss:   0.044901 | Val. loss:   0.002914 | Val. BER (4.0 dB):   0.000969 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 290/800 | Train loss:   0.047378 | Val. loss:   0.003624 | Val. BER (4.0 dB):   0.001250 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 291/800 | Train loss:   0.043192 | Val. loss:   0.002785 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 292/800 | Train loss:   0.043077 | Val. loss:   0.002419 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 293/800 | Train loss:   0.042978 | Val. loss:   0.002507 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 294/800 | Train loss:   0.042208 | Val. loss:   0.002118 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 295/800 | Train loss:   0.045194 | Val. loss:   0.002088 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 296/800 | Train loss:   0.043450 | Val. loss:   0.002878 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.044000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 297/800 | Train loss:   0.044562 | Val. loss:   0.002985 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 298/800 | Train loss:   0.045495 | Val. loss:   0.003633 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 299/800 | Train loss:   0.045938 | Val. loss:   0.003862 | Val. BER (4.0 dB):   0.001094 | Val. BLER (4.0 dB):   0.042000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 300/800 | Train loss:   0.044926 | Val. loss:   0.002939 | Val. BER (4.0 dB):   0.000969 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 301/800 | Train loss:   0.044405 | Val. loss:   0.002179 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 302/800 | Train loss:   0.044927 | Val. loss:   0.002453 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 303/800 | Train loss:   0.043502 | Val. loss:   0.002903 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 304/800 | Train loss:   0.043234 | Val. loss:   0.002332 | Val. BER (4.0 dB):   0.000562 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 305/800 | Train loss:   0.043706 | Val. loss:   0.002554 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 306/800 | Train loss:   0.042564 | Val. loss:   0.002839 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.038000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 307/800 | Train loss:   0.044905 | Val. loss:   0.002646 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 308/800 | Train loss:   0.043942 | Val. loss:   0.002508 | Val. BER (4.0 dB):   0.000750 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 309/800 | Train loss:   0.044921 | Val. loss:   0.002349 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 310/800 | Train loss:   0.042350 | Val. loss:   0.002708 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 311/800 | Train loss:   0.041618 | Val. loss:   0.002598 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 312/800 | Train loss:   0.041183 | Val. loss:   0.002065 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 313/800 | Train loss:   0.041214 | Val. loss:   0.003146 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 314/800 | Train loss:   0.042006 | Val. loss:   0.003049 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 315/800 | Train loss:   0.042823 | Val. loss:   0.002461 | Val. BER (4.0 dB):   0.000750 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 316/800 | Train loss:   0.040021 | Val. loss:   0.001967 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 317/800 | Train loss:   0.039474 | Val. loss:   0.002045 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 318/800 | Train loss:   0.039692 | Val. loss:   0.002731 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 319/800 | Train loss:   0.040653 | Val. loss:   0.002785 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 320/800 | Train loss:   0.040865 | Val. loss:   0.002155 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 321/800 | Train loss:   0.040755 | Val. loss:   0.002288 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 322/800 | Train loss:   0.040517 | Val. loss:   0.002208 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 323/800 | Train loss:   0.041143 | Val. loss:   0.001975 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 324/800 | Train loss:   0.041145 | Val. loss:   0.002388 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 325/800 | Train loss:   0.040700 | Val. loss:   0.001649 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 326/800 | Train loss:   0.041301 | Val. loss:   0.002483 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 327/800 | Train loss:   0.041555 | Val. loss:   0.001783 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 328/800 | Train loss:   0.041053 | Val. loss:   0.002551 | Val. BER (4.0 dB):   0.000844 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 329/800 | Train loss:   0.040130 | Val. loss:   0.001658 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 330/800 | Train loss:   0.040470 | Val. loss:   0.001628 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 331/800 | Train loss:   0.042403 | Val. loss:   0.002977 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 332/800 | Train loss:   0.042084 | Val. loss:   0.002216 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 333/800 | Train loss:   0.040924 | Val. loss:   0.002391 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 334/800 | Train loss:   0.040538 | Val. loss:   0.002676 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.036000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 335/800 | Train loss:   0.041256 | Val. loss:   0.001637 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 336/800 | Train loss:   0.041204 | Val. loss:   0.002129 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 337/800 | Train loss:   0.040822 | Val. loss:   0.002272 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 338/800 | Train loss:   0.040594 | Val. loss:   0.001685 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 339/800 | Train loss:   0.043244 | Val. loss:   0.002788 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 340/800 | Train loss:   0.040666 | Val. loss:   0.001677 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 341/800 | Train loss:   0.040674 | Val. loss:   0.003299 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 342/800 | Train loss:   0.041115 | Val. loss:   0.002006 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 343/800 | Train loss:   0.041342 | Val. loss:   0.002331 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 344/800 | Train loss:   0.039849 | Val. loss:   0.002319 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.034000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 345/800 | Train loss:   0.040830 | Val. loss:   0.002199 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 346/800 | Train loss:   0.041314 | Val. loss:   0.002372 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 347/800 | Train loss:   0.041050 | Val. loss:   0.001710 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 348/800 | Train loss:   0.039335 | Val. loss:   0.001860 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 349/800 | Train loss:   0.039551 | Val. loss:   0.001883 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 350/800 | Train loss:   0.038938 | Val. loss:   0.002201 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 351/800 | Train loss:   0.040933 | Val. loss:   0.002383 | Val. BER (4.0 dB):   0.000688 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 352/800 | Train loss:   0.040096 | Val. loss:   0.002075 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 353/800 | Train loss:   0.039945 | Val. loss:   0.002043 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 354/800 | Train loss:   0.041073 | Val. loss:   0.002299 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 355/800 | Train loss:   0.042363 | Val. loss:   0.001813 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 356/800 | Train loss:   0.041406 | Val. loss:   0.001917 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 357/800 | Train loss:   0.041474 | Val. loss:   0.002626 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 358/800 | Train loss:   0.039361 | Val. loss:   0.001356 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 359/800 | Train loss:   0.038637 | Val. loss:   0.001503 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 360/800 | Train loss:   0.039179 | Val. loss:   0.001916 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 361/800 | Train loss:   0.040481 | Val. loss:   0.001770 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 362/800 | Train loss:   0.041010 | Val. loss:   0.002206 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 363/800 | Train loss:   0.039052 | Val. loss:   0.002354 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 364/800 | Train loss:   0.038721 | Val. loss:   0.002032 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 365/800 | Train loss:   0.037969 | Val. loss:   0.003689 | Val. BER (4.0 dB):   0.001094 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 366/800 | Train loss:   0.038662 | Val. loss:   0.002661 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 367/800 | Train loss:   0.042403 | Val. loss:   0.001995 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 368/800 | Train loss:   0.037873 | Val. loss:   0.002392 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 369/800 | Train loss:   0.039570 | Val. loss:   0.001653 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 370/800 | Train loss:   0.039138 | Val. loss:   0.002730 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 371/800 | Train loss:   0.038181 | Val. loss:   0.001538 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 372/800 | Train loss:   0.039213 | Val. loss:   0.002000 | Val. BER (4.0 dB):   0.000562 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 373/800 | Train loss:   0.036789 | Val. loss:   0.001490 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 374/800 | Train loss:   0.038986 | Val. loss:   0.002302 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 375/800 | Train loss:   0.038378 | Val. loss:   0.002095 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 376/800 | Train loss:   0.038402 | Val. loss:   0.001906 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 377/800 | Train loss:   0.038566 | Val. loss:   0.001563 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 378/800 | Train loss:   0.041357 | Val. loss:   0.001937 | Val. BER (4.0 dB):   0.000437 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 379/800 | Train loss:   0.040297 | Val. loss:   0.001930 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 380/800 | Train loss:   0.039349 | Val. loss:   0.002178 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 381/800 | Train loss:   0.039691 | Val. loss:   0.002666 | Val. BER (4.0 dB):   0.001000 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 382/800 | Train loss:   0.040853 | Val. loss:   0.002582 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 383/800 | Train loss:   0.038899 | Val. loss:   0.001897 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 384/800 | Train loss:   0.039740 | Val. loss:   0.001849 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 385/800 | Train loss:   0.039314 | Val. loss:   0.001662 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 386/800 | Train loss:   0.039428 | Val. loss:   0.002176 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 387/800 | Train loss:   0.039354 | Val. loss:   0.002274 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 388/800 | Train loss:   0.037708 | Val. loss:   0.001935 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 389/800 | Train loss:   0.038787 | Val. loss:   0.002254 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 390/800 | Train loss:   0.038228 | Val. loss:   0.002159 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 391/800 | Train loss:   0.038328 | Val. loss:   0.002694 | Val. BER (4.0 dB):   0.001031 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 392/800 | Train loss:   0.039347 | Val. loss:   0.001461 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 393/800 | Train loss:   0.040203 | Val. loss:   0.001790 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 394/800 | Train loss:   0.037744 | Val. loss:   0.001597 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 395/800 | Train loss:   0.038678 | Val. loss:   0.001341 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 396/800 | Train loss:   0.036737 | Val. loss:   0.001860 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 397/800 | Train loss:   0.037265 | Val. loss:   0.001280 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.008000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 398/800 | Train loss:   0.039768 | Val. loss:   0.003015 | Val. BER (4.0 dB):   0.000844 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 399/800 | Train loss:   0.038430 | Val. loss:   0.001623 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 400/800 | Train loss:   0.040354 | Val. loss:   0.001749 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 401/800 | Train loss:   0.038952 | Val. loss:   0.002226 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 402/800 | Train loss:   0.037393 | Val. loss:   0.001261 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 403/800 | Train loss:   0.037336 | Val. loss:   0.001715 | Val. BER (4.0 dB):   0.000312 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 404/800 | Train loss:   0.037656 | Val. loss:   0.002616 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 405/800 | Train loss:   0.039227 | Val. loss:   0.002497 | Val. BER (4.0 dB):   0.000875 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 406/800 | Train loss:   0.039325 | Val. loss:   0.003081 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 407/800 | Train loss:   0.040604 | Val. loss:   0.001517 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 408/800 | Train loss:   0.038278 | Val. loss:   0.001570 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 409/800 | Train loss:   0.037753 | Val. loss:   0.002197 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 410/800 | Train loss:   0.037163 | Val. loss:   0.001784 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 411/800 | Train loss:   0.038792 | Val. loss:   0.001398 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 412/800 | Train loss:   0.040179 | Val. loss:   0.001244 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 413/800 | Train loss:   0.037780 | Val. loss:   0.001137 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.010000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 414/800 | Train loss:   0.037731 | Val. loss:   0.003396 | Val. BER (4.0 dB):   0.001063 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 415/800 | Train loss:   0.039037 | Val. loss:   0.001078 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.008000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 416/800 | Train loss:   0.039949 | Val. loss:   0.002105 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 417/800 | Train loss:   0.037318 | Val. loss:   0.002234 | Val. BER (4.0 dB):   0.000844 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 418/800 | Train loss:   0.038619 | Val. loss:   0.001749 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 419/800 | Train loss:   0.037113 | Val. loss:   0.002253 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 420/800 | Train loss:   0.037719 | Val. loss:   0.002135 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 421/800 | Train loss:   0.037249 | Val. loss:   0.001664 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 422/800 | Train loss:   0.037276 | Val. loss:   0.002495 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 423/800 | Train loss:   0.037275 | Val. loss:   0.001578 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 424/800 | Train loss:   0.036637 | Val. loss:   0.001951 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 425/800 | Train loss:   0.038039 | Val. loss:   0.001517 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 426/800 | Train loss:   0.037553 | Val. loss:   0.001977 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 427/800 | Train loss:   0.036942 | Val. loss:   0.002156 | Val. BER (4.0 dB):   0.000937 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 428/800 | Train loss:   0.036273 | Val. loss:   0.001592 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.010000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 429/800 | Train loss:   0.036537 | Val. loss:   0.001712 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 430/800 | Train loss:   0.037181 | Val. loss:   0.001697 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 431/800 | Train loss:   0.039590 | Val. loss:   0.001359 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 432/800 | Train loss:   0.037651 | Val. loss:   0.002476 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 433/800 | Train loss:   0.037819 | Val. loss:   0.001905 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 434/800 | Train loss:   0.037945 | Val. loss:   0.001876 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 435/800 | Train loss:   0.038414 | Val. loss:   0.002123 | Val. BER (4.0 dB):   0.000625 | Val. BLER (4.0 dB):   0.026000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 436/800 | Train loss:   0.037547 | Val. loss:   0.002168 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 437/800 | Train loss:   0.037909 | Val. loss:   0.002821 | Val. BER (4.0 dB):   0.000906 | Val. BLER (4.0 dB):   0.040000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 438/800 | Train loss:   0.039483 | Val. loss:   0.001891 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 439/800 | Train loss:   0.039600 | Val. loss:   0.001222 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.008000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 440/800 | Train loss:   0.038130 | Val. loss:   0.001195 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.010000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 441/800 | Train loss:   0.036754 | Val. loss:   0.001650 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 442/800 | Train loss:   0.036601 | Val. loss:   0.002088 | Val. BER (4.0 dB):   0.000500 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 443/800 | Train loss:   0.037150 | Val. loss:   0.001603 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 444/800 | Train loss:   0.037110 | Val. loss:   0.002324 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.022000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 445/800 | Train loss:   0.037223 | Val. loss:   0.001760 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.018000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 446/800 | Train loss:   0.036944 | Val. loss:   0.001692 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 447/800 | Train loss:   0.037103 | Val. loss:   0.002294 | Val. BER (4.0 dB):   0.000812 | Val. BLER (4.0 dB):   0.032000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 448/800 | Train loss:   0.036218 | Val. loss:   0.001081 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.010000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 449/800 | Train loss:   0.037266 | Val. loss:   0.001377 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.006000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 450/800 | Train loss:   0.037077 | Val. loss:   0.001945 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 451/800 | Train loss:   0.038410 | Val. loss:   0.001650 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 452/800 | Train loss:   0.040032 | Val. loss:   0.002165 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 453/800 | Train loss:   0.036479 | Val. loss:   0.001544 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.014000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 454/800 | Train loss:   0.037434 | Val. loss:   0.002089 | Val. BER (4.0 dB):   0.000656 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 455/800 | Train loss:   0.036067 | Val. loss:   0.001589 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 456/800 | Train loss:   0.035621 | Val. loss:   0.001721 | Val. BER (4.0 dB):   0.000719 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 457/800 | Train loss:   0.037452 | Val. loss:   0.002031 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.028000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  42
+Epoch: 458/800 | Train loss:   0.036494 | Val. loss:   0.002394 | Val. BER (4.0 dB):   0.000781 | Val. BLER (4.0 dB):   0.024000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  43
+Epoch: 459/800 | Train loss:   0.037235 | Val. loss:   0.001923 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.020000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  44
+Epoch: 460/800 | Train loss:   0.035926 | Val. loss:   0.001364 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.008000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  45
+Epoch: 461/800 | Train loss:   0.036185 | Val. loss:   0.001477 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.008000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  46
+Epoch: 462/800 | Train loss:   0.035944 | Val. loss:   0.001884 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.012000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  47
+Epoch: 463/800 | Train loss:   0.036420 | Val. loss:   0.001121 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.016000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  48
+Epoch: 464/800 | Train loss:   0.036383 | Val. loss:   0.001878 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.030000 | Batch size:  500 | Learning rate: 1.000000e-04 | Stuck:  49
+Loss stuck for 50 epochs: increase batch size to 1000.
+Epoch: 465/800 | Train loss:   0.036938 | Val. loss:   0.001810 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.022000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 466/800 | Train loss:   0.034963 | Val. loss:   0.002196 | Val. BER (4.0 dB):   0.000578 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 467/800 | Train loss:   0.034938 | Val. loss:   0.001264 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 468/800 | Train loss:   0.034826 | Val. loss:   0.001470 | Val. BER (4.0 dB):   0.000391 | Val. BLER (4.0 dB):   0.018000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 469/800 | Train loss:   0.034841 | Val. loss:   0.001708 | Val. BER (4.0 dB):   0.000609 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 470/800 | Train loss:   0.035656 | Val. loss:   0.001953 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.023000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 471/800 | Train loss:   0.035197 | Val. loss:   0.001159 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 472/800 | Train loss:   0.036243 | Val. loss:   0.002081 | Val. BER (4.0 dB):   0.000547 | Val. BLER (4.0 dB):   0.017000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 473/800 | Train loss:   0.037091 | Val. loss:   0.001768 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 474/800 | Train loss:   0.035557 | Val. loss:   0.001721 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 475/800 | Train loss:   0.035813 | Val. loss:   0.001407 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 476/800 | Train loss:   0.034720 | Val. loss:   0.001923 | Val. BER (4.0 dB):   0.000703 | Val. BLER (4.0 dB):   0.022000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 477/800 | Train loss:   0.035142 | Val. loss:   0.001138 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 478/800 | Train loss:   0.036865 | Val. loss:   0.001345 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.015000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 479/800 | Train loss:   0.037441 | Val. loss:   0.001910 | Val. BER (4.0 dB):   0.000672 | Val. BLER (4.0 dB):   0.018000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 480/800 | Train loss:   0.035666 | Val. loss:   0.001403 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 481/800 | Train loss:   0.035031 | Val. loss:   0.001662 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 482/800 | Train loss:   0.035216 | Val. loss:   0.001475 | Val. BER (4.0 dB):   0.000453 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 483/800 | Train loss:   0.035882 | Val. loss:   0.001388 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.015000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 484/800 | Train loss:   0.035076 | Val. loss:   0.001528 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 485/800 | Train loss:   0.035782 | Val. loss:   0.001563 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 486/800 | Train loss:   0.035878 | Val. loss:   0.001613 | Val. BER (4.0 dB):   0.000453 | Val. BLER (4.0 dB):   0.018000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 487/800 | Train loss:   0.035744 | Val. loss:   0.001652 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 488/800 | Train loss:   0.035033 | Val. loss:   0.001401 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 489/800 | Train loss:   0.034806 | Val. loss:   0.001165 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 490/800 | Train loss:   0.035526 | Val. loss:   0.001251 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 491/800 | Train loss:   0.035611 | Val. loss:   0.002053 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.015000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 492/800 | Train loss:   0.035351 | Val. loss:   0.001297 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 493/800 | Train loss:   0.036287 | Val. loss:   0.002180 | Val. BER (4.0 dB):   0.000672 | Val. BLER (4.0 dB):   0.025000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 494/800 | Train loss:   0.035650 | Val. loss:   0.001542 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 495/800 | Train loss:   0.035356 | Val. loss:   0.001795 | Val. BER (4.0 dB):   0.000547 | Val. BLER (4.0 dB):   0.018000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 496/800 | Train loss:   0.035889 | Val. loss:   0.001955 | Val. BER (4.0 dB):   0.000609 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 497/800 | Train loss:   0.034769 | Val. loss:   0.001376 | Val. BER (4.0 dB):   0.000313 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 498/800 | Train loss:   0.035209 | Val. loss:   0.001662 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.023000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 499/800 | Train loss:   0.035583 | Val. loss:   0.001214 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 500/800 | Train loss:   0.035796 | Val. loss:   0.001694 | Val. BER (4.0 dB):   0.000422 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 501/800 | Train loss:   0.035072 | Val. loss:   0.001203 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 502/800 | Train loss:   0.035153 | Val. loss:   0.001888 | Val. BER (4.0 dB):   0.000578 | Val. BLER (4.0 dB):   0.023000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 503/800 | Train loss:   0.034970 | Val. loss:   0.001726 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.019000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 504/800 | Train loss:   0.035102 | Val. loss:   0.001503 | Val. BER (4.0 dB):   0.000359 | Val. BLER (4.0 dB):   0.017000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 505/800 | Train loss:   0.034467 | Val. loss:   0.001413 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 506/800 | Train loss:   0.034813 | Val. loss:   0.001614 | Val. BER (4.0 dB):   0.000422 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 507/800 | Train loss:   0.034477 | Val. loss:   0.001312 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  42
+Epoch: 508/800 | Train loss:   0.035646 | Val. loss:   0.001906 | Val. BER (4.0 dB):   0.000437 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  43
+Epoch: 509/800 | Train loss:   0.035472 | Val. loss:   0.001199 | Val. BER (4.0 dB):   0.000172 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  44
+Epoch: 510/800 | Train loss:   0.034276 | Val. loss:   0.001995 | Val. BER (4.0 dB):   0.000687 | Val. BLER (4.0 dB):   0.022000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  45
+Epoch: 511/800 | Train loss:   0.035548 | Val. loss:   0.001741 | Val. BER (4.0 dB):   0.000531 | Val. BLER (4.0 dB):   0.017000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  46
+Epoch: 512/800 | Train loss:   0.035609 | Val. loss:   0.001443 | Val. BER (4.0 dB):   0.000438 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  47
+Epoch: 513/800 | Train loss:   0.035675 | Val. loss:   0.001358 | Val. BER (4.0 dB):   0.000391 | Val. BLER (4.0 dB):   0.016000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  48
+Epoch: 514/800 | Train loss:   0.035809 | Val. loss:   0.000919 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 515/800 | Train loss:   0.035621 | Val. loss:   0.001442 | Val. BER (4.0 dB):   0.000563 | Val. BLER (4.0 dB):   0.015000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 516/800 | Train loss:   0.036016 | Val. loss:   0.001181 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 517/800 | Train loss:   0.035731 | Val. loss:   0.001169 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.015000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 518/800 | Train loss:   0.036254 | Val. loss:   0.001062 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 519/800 | Train loss:   0.036673 | Val. loss:   0.001184 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 520/800 | Train loss:   0.036556 | Val. loss:   0.001208 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 521/800 | Train loss:   0.036241 | Val. loss:   0.000752 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 522/800 | Train loss:   0.036072 | Val. loss:   0.002087 | Val. BER (4.0 dB):   0.000797 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 523/800 | Train loss:   0.036357 | Val. loss:   0.001224 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 524/800 | Train loss:   0.037645 | Val. loss:   0.001041 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 525/800 | Train loss:   0.038011 | Val. loss:   0.001594 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 526/800 | Train loss:   0.037577 | Val. loss:   0.001182 | Val. BER (4.0 dB):   0.000469 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 527/800 | Train loss:   0.037260 | Val. loss:   0.001078 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 528/800 | Train loss:   0.037982 | Val. loss:   0.001183 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 529/800 | Train loss:   0.038294 | Val. loss:   0.000983 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 530/800 | Train loss:   0.038005 | Val. loss:   0.001260 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 531/800 | Train loss:   0.037434 | Val. loss:   0.000949 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 532/800 | Train loss:   0.038607 | Val. loss:   0.001183 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 533/800 | Train loss:   0.037535 | Val. loss:   0.000919 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 534/800 | Train loss:   0.037528 | Val. loss:   0.001098 | Val. BER (4.0 dB):   0.000422 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 535/800 | Train loss:   0.040261 | Val. loss:   0.001185 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 536/800 | Train loss:   0.038540 | Val. loss:   0.001300 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 537/800 | Train loss:   0.038684 | Val. loss:   0.000750 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 538/800 | Train loss:   0.038197 | Val. loss:   0.000833 | Val. BER (4.0 dB):   0.000172 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 539/800 | Train loss:   0.039403 | Val. loss:   0.000595 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 540/800 | Train loss:   0.039642 | Val. loss:   0.000986 | Val. BER (4.0 dB):   0.000172 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 541/800 | Train loss:   0.039296 | Val. loss:   0.000949 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 542/800 | Train loss:   0.038736 | Val. loss:   0.000925 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.013000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 543/800 | Train loss:   0.039714 | Val. loss:   0.000781 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 544/800 | Train loss:   0.040071 | Val. loss:   0.001129 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 545/800 | Train loss:   0.039960 | Val. loss:   0.000948 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 546/800 | Train loss:   0.038689 | Val. loss:   0.000751 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 547/800 | Train loss:   0.038155 | Val. loss:   0.001335 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 548/800 | Train loss:   0.038588 | Val. loss:   0.000831 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 549/800 | Train loss:   0.037823 | Val. loss:   0.001145 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 550/800 | Train loss:   0.038056 | Val. loss:   0.001145 | Val. BER (4.0 dB):   0.000391 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 551/800 | Train loss:   0.037412 | Val. loss:   0.000517 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 552/800 | Train loss:   0.036569 | Val. loss:   0.000811 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 553/800 | Train loss:   0.038624 | Val. loss:   0.001070 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 554/800 | Train loss:   0.039451 | Val. loss:   0.000794 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 555/800 | Train loss:   0.040090 | Val. loss:   0.000722 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 556/800 | Train loss:   0.038528 | Val. loss:   0.001225 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 557/800 | Train loss:   0.039359 | Val. loss:   0.000987 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 558/800 | Train loss:   0.039468 | Val. loss:   0.000688 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 559/800 | Train loss:   0.039282 | Val. loss:   0.000684 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 560/800 | Train loss:   0.039023 | Val. loss:   0.000471 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 561/800 | Train loss:   0.040069 | Val. loss:   0.000746 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 562/800 | Train loss:   0.040221 | Val. loss:   0.000986 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.014000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 563/800 | Train loss:   0.039239 | Val. loss:   0.000833 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 564/800 | Train loss:   0.039891 | Val. loss:   0.000556 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 565/800 | Train loss:   0.038911 | Val. loss:   0.000514 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 566/800 | Train loss:   0.038458 | Val. loss:   0.000660 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 567/800 | Train loss:   0.038771 | Val. loss:   0.001048 | Val. BER (4.0 dB):   0.000359 | Val. BLER (4.0 dB):   0.012000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 568/800 | Train loss:   0.040105 | Val. loss:   0.000517 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 569/800 | Train loss:   0.039333 | Val. loss:   0.000684 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 570/800 | Train loss:   0.037815 | Val. loss:   0.001552 | Val. BER (4.0 dB):   0.000594 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 571/800 | Train loss:   0.039047 | Val. loss:   0.000804 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 572/800 | Train loss:   0.039055 | Val. loss:   0.000658 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 573/800 | Train loss:   0.041132 | Val. loss:   0.000554 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 574/800 | Train loss:   0.038885 | Val. loss:   0.000727 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 575/800 | Train loss:   0.037900 | Val. loss:   0.000914 | Val. BER (4.0 dB):   0.000375 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 576/800 | Train loss:   0.037284 | Val. loss:   0.000592 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 577/800 | Train loss:   0.037598 | Val. loss:   0.000474 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 578/800 | Train loss:   0.037995 | Val. loss:   0.000525 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 579/800 | Train loss:   0.037532 | Val. loss:   0.001241 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 580/800 | Train loss:   0.039648 | Val. loss:   0.000908 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 581/800 | Train loss:   0.038919 | Val. loss:   0.001471 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 582/800 | Train loss:   0.037634 | Val. loss:   0.000474 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 583/800 | Train loss:   0.039268 | Val. loss:   0.000480 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 584/800 | Train loss:   0.039332 | Val. loss:   0.001054 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 585/800 | Train loss:   0.039914 | Val. loss:   0.000601 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 586/800 | Train loss:   0.039712 | Val. loss:   0.000394 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 587/800 | Train loss:   0.039843 | Val. loss:   0.000456 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 588/800 | Train loss:   0.039173 | Val. loss:   0.001153 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 589/800 | Train loss:   0.039180 | Val. loss:   0.000523 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 590/800 | Train loss:   0.040990 | Val. loss:   0.001492 | Val. BER (4.0 dB):   0.000312 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 591/800 | Train loss:   0.040697 | Val. loss:   0.000968 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 592/800 | Train loss:   0.040712 | Val. loss:   0.002242 | Val. BER (4.0 dB):   0.000484 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 593/800 | Train loss:   0.039588 | Val. loss:   0.000739 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 594/800 | Train loss:   0.039425 | Val. loss:   0.000649 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 595/800 | Train loss:   0.037655 | Val. loss:   0.000405 | Val. BER (4.0 dB):   0.000031 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 596/800 | Train loss:   0.037996 | Val. loss:   0.001138 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 597/800 | Train loss:   0.038191 | Val. loss:   0.000773 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 598/800 | Train loss:   0.037642 | Val. loss:   0.000590 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 599/800 | Train loss:   0.038411 | Val. loss:   0.001189 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 600/800 | Train loss:   0.038396 | Val. loss:   0.000431 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 601/800 | Train loss:   0.037580 | Val. loss:   0.000717 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 602/800 | Train loss:   0.039220 | Val. loss:   0.000677 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 603/800 | Train loss:   0.038476 | Val. loss:   0.001812 | Val. BER (4.0 dB):   0.000578 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 604/800 | Train loss:   0.038039 | Val. loss:   0.000743 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 605/800 | Train loss:   0.039528 | Val. loss:   0.000860 | Val. BER (4.0 dB):   0.000344 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 606/800 | Train loss:   0.039766 | Val. loss:   0.000757 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 607/800 | Train loss:   0.038212 | Val. loss:   0.000987 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 608/800 | Train loss:   0.038604 | Val. loss:   0.000469 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 609/800 | Train loss:   0.039700 | Val. loss:   0.000500 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 610/800 | Train loss:   0.040560 | Val. loss:   0.000710 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 611/800 | Train loss:   0.042697 | Val. loss:   0.001112 | Val. BER (4.0 dB):   0.000484 | Val. BLER (4.0 dB):   0.011000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 612/800 | Train loss:   0.041031 | Val. loss:   0.001214 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 613/800 | Train loss:   0.040018 | Val. loss:   0.000417 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 614/800 | Train loss:   0.039004 | Val. loss:   0.001124 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 615/800 | Train loss:   0.039048 | Val. loss:   0.000415 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.001000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 616/800 | Train loss:   0.038575 | Val. loss:   0.001033 | Val. BER (4.0 dB):   0.000406 | Val. BLER (4.0 dB):   0.009000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 617/800 | Train loss:   0.037221 | Val. loss:   0.000812 | Val. BER (4.0 dB):   0.000312 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 618/800 | Train loss:   0.040262 | Val. loss:   0.000513 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 619/800 | Train loss:   0.039219 | Val. loss:   0.001254 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 620/800 | Train loss:   0.040177 | Val. loss:   0.000971 | Val. BER (4.0 dB):   0.000328 | Val. BLER (4.0 dB):   0.010000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 621/800 | Train loss:   0.039013 | Val. loss:   0.000772 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 622/800 | Train loss:   0.040573 | Val. loss:   0.000852 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 623/800 | Train loss:   0.038799 | Val. loss:   0.000285 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 624/800 | Train loss:   0.038834 | Val. loss:   0.000251 | Val. BER (4.0 dB):   0.000031 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 625/800 | Train loss:   0.037769 | Val. loss:   0.000232 | Val. BER (4.0 dB):   0.000031 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 626/800 | Train loss:   0.038039 | Val. loss:   0.000730 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 627/800 | Train loss:   0.037320 | Val. loss:   0.000257 | Val. BER (4.0 dB):   0.000016 | Val. BLER (4.0 dB):   0.001000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 628/800 | Train loss:   0.038182 | Val. loss:   0.001118 | Val. BER (4.0 dB):   0.000297 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 629/800 | Train loss:   0.038849 | Val. loss:   0.000399 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 630/800 | Train loss:   0.036388 | Val. loss:   0.000979 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 631/800 | Train loss:   0.037428 | Val. loss:   0.000450 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 632/800 | Train loss:   0.036514 | Val. loss:   0.000501 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 633/800 | Train loss:   0.038787 | Val. loss:   0.000492 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 634/800 | Train loss:   0.038805 | Val. loss:   0.000866 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 635/800 | Train loss:   0.039026 | Val. loss:   0.000499 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 636/800 | Train loss:   0.038665 | Val. loss:   0.000398 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 637/800 | Train loss:   0.039011 | Val. loss:   0.001011 | Val. BER (4.0 dB):   0.000359 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 638/800 | Train loss:   0.038766 | Val. loss:   0.000630 | Val. BER (4.0 dB):   0.000234 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 639/800 | Train loss:   0.037096 | Val. loss:   0.000412 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 640/800 | Train loss:   0.038692 | Val. loss:   0.000427 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 641/800 | Train loss:   0.039504 | Val. loss:   0.000518 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 642/800 | Train loss:   0.039972 | Val. loss:   0.000474 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 643/800 | Train loss:   0.038965 | Val. loss:   0.000429 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 644/800 | Train loss:   0.038434 | Val. loss:   0.000601 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 645/800 | Train loss:   0.038656 | Val. loss:   0.000356 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 646/800 | Train loss:   0.039535 | Val. loss:   0.000443 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 647/800 | Train loss:   0.039207 | Val. loss:   0.000720 | Val. BER (4.0 dB):   0.000172 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 648/800 | Train loss:   0.040254 | Val. loss:   0.001129 | Val. BER (4.0 dB):   0.000359 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 649/800 | Train loss:   0.040008 | Val. loss:   0.000390 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 650/800 | Train loss:   0.037955 | Val. loss:   0.000808 | Val. BER (4.0 dB):   0.000219 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 651/800 | Train loss:   0.038622 | Val. loss:   0.000518 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 652/800 | Train loss:   0.038034 | Val. loss:   0.001607 | Val. BER (4.0 dB):   0.000359 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 653/800 | Train loss:   0.037064 | Val. loss:   0.000335 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 654/800 | Train loss:   0.037210 | Val. loss:   0.001416 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 655/800 | Train loss:   0.037428 | Val. loss:   0.000333 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 656/800 | Train loss:   0.038468 | Val. loss:   0.000535 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 657/800 | Train loss:   0.036130 | Val. loss:   0.000550 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 658/800 | Train loss:   0.036780 | Val. loss:   0.000626 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 659/800 | Train loss:   0.037124 | Val. loss:   0.000474 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 660/800 | Train loss:   0.037451 | Val. loss:   0.000324 | Val. BER (4.0 dB):   0.000031 | Val. BLER (4.0 dB):   0.002000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 661/800 | Train loss:   0.036334 | Val. loss:   0.000560 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 662/800 | Train loss:   0.036195 | Val. loss:   0.000688 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 663/800 | Train loss:   0.036984 | Val. loss:   0.000471 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 664/800 | Train loss:   0.037077 | Val. loss:   0.000554 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 665/800 | Train loss:   0.038739 | Val. loss:   0.000736 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.008000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 666/800 | Train loss:   0.038707 | Val. loss:   0.000385 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 667/800 | Train loss:   0.038081 | Val. loss:   0.001338 | Val. BER (4.0 dB):   0.000422 | Val. BLER (4.0 dB):   0.006000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  42
+Epoch: 668/800 | Train loss:   0.039321 | Val. loss:   0.000733 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.007000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  43
+Epoch: 669/800 | Train loss:   0.039860 | Val. loss:   0.000318 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  44
+Epoch: 670/800 | Train loss:   0.039320 | Val. loss:   0.000593 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  45
+Epoch: 671/800 | Train loss:   0.037270 | Val. loss:   0.000411 | Val. BER (4.0 dB):   0.000156 | Val. BLER (4.0 dB):   0.003000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  46
+Epoch: 672/800 | Train loss:   0.038130 | Val. loss:   0.000578 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  47
+Epoch: 673/800 | Train loss:   0.039531 | Val. loss:   0.000336 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.005000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  48
+Epoch: 674/800 | Train loss:   0.040600 | Val. loss:   0.000679 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.004000 | Batch size: 1000 | Learning rate: 1.000000e-04 | Stuck:  49
+Loss stuck for 50 epochs: increase batch size to 2000.
+Epoch: 675/800 | Train loss:   0.040225 | Val. loss:   0.000278 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.002000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 676/800 | Train loss:   0.037335 | Val. loss:   0.000629 | Val. BER (4.0 dB):   0.000164 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 677/800 | Train loss:   0.036569 | Val. loss:   0.000364 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.002000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 678/800 | Train loss:   0.037393 | Val. loss:   0.000765 | Val. BER (4.0 dB):   0.000242 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 679/800 | Train loss:   0.036871 | Val. loss:   0.000832 | Val. BER (4.0 dB):   0.000211 | Val. BLER (4.0 dB):   0.007000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 680/800 | Train loss:   0.034380 | Val. loss:   0.000558 | Val. BER (4.0 dB):   0.000195 | Val. BLER (4.0 dB):   0.006000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 681/800 | Train loss:   0.035154 | Val. loss:   0.000297 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.002500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 682/800 | Train loss:   0.035513 | Val. loss:   0.000358 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.004000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 683/800 | Train loss:   0.035596 | Val. loss:   0.000533 | Val. BER (4.0 dB):   0.000117 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 684/800 | Train loss:   0.038568 | Val. loss:   0.000387 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.002500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 685/800 | Train loss:   0.037789 | Val. loss:   0.000452 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 686/800 | Train loss:   0.037200 | Val. loss:   0.000726 | Val. BER (4.0 dB):   0.000258 | Val. BLER (4.0 dB):   0.004000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 687/800 | Train loss:   0.036814 | Val. loss:   0.000415 | Val. BER (4.0 dB):   0.000133 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 688/800 | Train loss:   0.036573 | Val. loss:   0.000318 | Val. BER (4.0 dB):   0.000102 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 689/800 | Train loss:   0.037201 | Val. loss:   0.000539 | Val. BER (4.0 dB):   0.000148 | Val. BLER (4.0 dB):   0.002500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 690/800 | Train loss:   0.036152 | Val. loss:   0.000392 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.002500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 691/800 | Train loss:   0.036693 | Val. loss:   0.000304 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.003000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 692/800 | Train loss:   0.033794 | Val. loss:   0.000375 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 693/800 | Train loss:   0.035692 | Val. loss:   0.000533 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 694/800 | Train loss:   0.034381 | Val. loss:   0.000656 | Val. BER (4.0 dB):   0.000258 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 695/800 | Train loss:   0.035907 | Val. loss:   0.000386 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 696/800 | Train loss:   0.037142 | Val. loss:   0.000388 | Val. BER (4.0 dB):   0.000102 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 697/800 | Train loss:   0.036641 | Val. loss:   0.000316 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 698/800 | Train loss:   0.038476 | Val. loss:   0.000875 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 699/800 | Train loss:   0.038275 | Val. loss:   0.000468 | Val. BER (4.0 dB):   0.000148 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 700/800 | Train loss:   0.035924 | Val. loss:   0.000441 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 701/800 | Train loss:   0.035177 | Val. loss:   0.000873 | Val. BER (4.0 dB):   0.000273 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 702/800 | Train loss:   0.034238 | Val. loss:   0.000354 | Val. BER (4.0 dB):   0.000070 | Val. BLER (4.0 dB):   0.004000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 703/800 | Train loss:   0.034085 | Val. loss:   0.000777 | Val. BER (4.0 dB):   0.000203 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 704/800 | Train loss:   0.035454 | Val. loss:   0.000362 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.003000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 705/800 | Train loss:   0.035731 | Val. loss:   0.001441 | Val. BER (4.0 dB):   0.000258 | Val. BLER (4.0 dB):   0.006500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 706/800 | Train loss:   0.036963 | Val. loss:   0.000233 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.002000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 707/800 | Train loss:   0.036223 | Val. loss:   0.000830 | Val. BER (4.0 dB):   0.000305 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 708/800 | Train loss:   0.036723 | Val. loss:   0.000939 | Val. BER (4.0 dB):   0.000367 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 709/800 | Train loss:   0.036554 | Val. loss:   0.000369 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 710/800 | Train loss:   0.034102 | Val. loss:   0.000314 | Val. BER (4.0 dB):   0.000078 | Val. BLER (4.0 dB):   0.004000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 711/800 | Train loss:   0.033937 | Val. loss:   0.000528 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.006000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 712/800 | Train loss:   0.035031 | Val. loss:   0.000777 | Val. BER (4.0 dB):   0.000266 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 713/800 | Train loss:   0.035575 | Val. loss:   0.000328 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.002000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 714/800 | Train loss:   0.035983 | Val. loss:   0.000361 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.003000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 715/800 | Train loss:   0.035801 | Val. loss:   0.000473 | Val. BER (4.0 dB):   0.000133 | Val. BLER (4.0 dB):   0.005500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 716/800 | Train loss:   0.035287 | Val. loss:   0.000607 | Val. BER (4.0 dB):   0.000180 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 717/800 | Train loss:   0.034541 | Val. loss:   0.000310 | Val. BER (4.0 dB):   0.000023 | Val. BLER (4.0 dB):   0.001500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  42
+Epoch: 718/800 | Train loss:   0.035857 | Val. loss:   0.000467 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  43
+Epoch: 719/800 | Train loss:   0.035782 | Val. loss:   0.000388 | Val. BER (4.0 dB):   0.000164 | Val. BLER (4.0 dB):   0.004000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  44
+Epoch: 720/800 | Train loss:   0.035988 | Val. loss:   0.000543 | Val. BER (4.0 dB):   0.000133 | Val. BLER (4.0 dB):   0.003500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  45
+Epoch: 721/800 | Train loss:   0.037341 | Val. loss:   0.000997 | Val. BER (4.0 dB):   0.000242 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  46
+Epoch: 722/800 | Train loss:   0.036978 | Val. loss:   0.000438 | Val. BER (4.0 dB):   0.000227 | Val. BLER (4.0 dB):   0.004500 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  47
+Epoch: 723/800 | Train loss:   0.037267 | Val. loss:   0.000805 | Val. BER (4.0 dB):   0.000250 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  48
+Epoch: 724/800 | Train loss:   0.037561 | Val. loss:   0.000732 | Val. BER (4.0 dB):   0.000281 | Val. BLER (4.0 dB):   0.005000 | Batch size: 2000 | Learning rate: 1.000000e-04 | Stuck:  49
+Loss stuck for 50 epochs: increase batch size to 4000.
+Epoch: 725/800 | Train loss:   0.038079 | Val. loss:   0.000421 | Val. BER (4.0 dB):   0.000086 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 726/800 | Train loss:   0.035602 | Val. loss:   0.000436 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.004750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 727/800 | Train loss:   0.033703 | Val. loss:   0.000569 | Val. BER (4.0 dB):   0.000184 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 728/800 | Train loss:   0.033342 | Val. loss:   0.000589 | Val. BER (4.0 dB):   0.000180 | Val. BLER (4.0 dB):   0.005250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 729/800 | Train loss:   0.034569 | Val. loss:   0.000419 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.004000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 730/800 | Train loss:   0.035088 | Val. loss:   0.000468 | Val. BER (4.0 dB):   0.000137 | Val. BLER (4.0 dB):   0.004750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 731/800 | Train loss:   0.034526 | Val. loss:   0.000365 | Val. BER (4.0 dB):   0.000145 | Val. BLER (4.0 dB):   0.003750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 732/800 | Train loss:   0.034158 | Val. loss:   0.000368 | Val. BER (4.0 dB):   0.000066 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 733/800 | Train loss:   0.033751 | Val. loss:   0.000452 | Val. BER (4.0 dB):   0.000098 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 734/800 | Train loss:   0.034280 | Val. loss:   0.000212 | Val. BER (4.0 dB):   0.000027 | Val. BLER (4.0 dB):   0.001250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   0
+Epoch: 735/800 | Train loss:   0.035662 | Val. loss:   0.000608 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   1
+Epoch: 736/800 | Train loss:   0.035482 | Val. loss:   0.000328 | Val. BER (4.0 dB):   0.000090 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   2
+Epoch: 737/800 | Train loss:   0.036326 | Val. loss:   0.000473 | Val. BER (4.0 dB):   0.000145 | Val. BLER (4.0 dB):   0.004750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   3
+Epoch: 738/800 | Train loss:   0.033846 | Val. loss:   0.000428 | Val. BER (4.0 dB):   0.000113 | Val. BLER (4.0 dB):   0.001750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   4
+Epoch: 739/800 | Train loss:   0.033447 | Val. loss:   0.000318 | Val. BER (4.0 dB):   0.000086 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   5
+Epoch: 740/800 | Train loss:   0.032928 | Val. loss:   0.000747 | Val. BER (4.0 dB):   0.000191 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   6
+Epoch: 741/800 | Train loss:   0.033038 | Val. loss:   0.000343 | Val. BER (4.0 dB):   0.000102 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   7
+Epoch: 742/800 | Train loss:   0.033258 | Val. loss:   0.000313 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.002500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   8
+Epoch: 743/800 | Train loss:   0.033396 | Val. loss:   0.000401 | Val. BER (4.0 dB):   0.000105 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:   9
+Epoch: 744/800 | Train loss:   0.033509 | Val. loss:   0.000224 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.002500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  10
+Epoch: 745/800 | Train loss:   0.034275 | Val. loss:   0.000396 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.004000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  11
+Epoch: 746/800 | Train loss:   0.034090 | Val. loss:   0.000423 | Val. BER (4.0 dB):   0.000145 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  12
+Epoch: 747/800 | Train loss:   0.034854 | Val. loss:   0.000329 | Val. BER (4.0 dB):   0.000066 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  13
+Epoch: 748/800 | Train loss:   0.036137 | Val. loss:   0.000356 | Val. BER (4.0 dB):   0.000066 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  14
+Epoch: 749/800 | Train loss:   0.035560 | Val. loss:   0.000347 | Val. BER (4.0 dB):   0.000098 | Val. BLER (4.0 dB):   0.002500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  15
+Epoch: 750/800 | Train loss:   0.034567 | Val. loss:   0.000241 | Val. BER (4.0 dB):   0.000043 | Val. BLER (4.0 dB):   0.001750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  16
+Epoch: 751/800 | Train loss:   0.034320 | Val. loss:   0.000299 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  17
+Epoch: 752/800 | Train loss:   0.033795 | Val. loss:   0.000555 | Val. BER (4.0 dB):   0.000191 | Val. BLER (4.0 dB):   0.004500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  18
+Epoch: 753/800 | Train loss:   0.033997 | Val. loss:   0.000823 | Val. BER (4.0 dB):   0.000367 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  19
+Epoch: 754/800 | Train loss:   0.032542 | Val. loss:   0.000362 | Val. BER (4.0 dB):   0.000102 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  20
+Epoch: 755/800 | Train loss:   0.032446 | Val. loss:   0.000383 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  21
+Epoch: 756/800 | Train loss:   0.033108 | Val. loss:   0.000447 | Val. BER (4.0 dB):   0.000137 | Val. BLER (4.0 dB):   0.003750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  22
+Epoch: 757/800 | Train loss:   0.035436 | Val. loss:   0.000387 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  23
+Epoch: 758/800 | Train loss:   0.035308 | Val. loss:   0.000460 | Val. BER (4.0 dB):   0.000137 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  24
+Epoch: 759/800 | Train loss:   0.035450 | Val. loss:   0.000244 | Val. BER (4.0 dB):   0.000047 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  25
+Epoch: 760/800 | Train loss:   0.035303 | Val. loss:   0.000341 | Val. BER (4.0 dB):   0.000086 | Val. BLER (4.0 dB):   0.002500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  26
+Epoch: 761/800 | Train loss:   0.035553 | Val. loss:   0.000588 | Val. BER (4.0 dB):   0.000223 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  27
+Epoch: 762/800 | Train loss:   0.035165 | Val. loss:   0.000485 | Val. BER (4.0 dB):   0.000172 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  28
+Epoch: 763/800 | Train loss:   0.034511 | Val. loss:   0.000380 | Val. BER (4.0 dB):   0.000074 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  29
+Epoch: 764/800 | Train loss:   0.034901 | Val. loss:   0.000235 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.001500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  30
+Epoch: 765/800 | Train loss:   0.034513 | Val. loss:   0.000288 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.001500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  31
+Epoch: 766/800 | Train loss:   0.035075 | Val. loss:   0.000328 | Val. BER (4.0 dB):   0.000074 | Val. BLER (4.0 dB):   0.002750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  32
+Epoch: 767/800 | Train loss:   0.035340 | Val. loss:   0.000411 | Val. BER (4.0 dB):   0.000141 | Val. BLER (4.0 dB):   0.004000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  33
+Epoch: 768/800 | Train loss:   0.033522 | Val. loss:   0.000297 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  34
+Epoch: 769/800 | Train loss:   0.033739 | Val. loss:   0.000574 | Val. BER (4.0 dB):   0.000215 | Val. BLER (4.0 dB):   0.003750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  35
+Epoch: 770/800 | Train loss:   0.034498 | Val. loss:   0.000283 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  36
+Epoch: 771/800 | Train loss:   0.034434 | Val. loss:   0.000394 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  37
+Epoch: 772/800 | Train loss:   0.035028 | Val. loss:   0.000301 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  38
+Epoch: 773/800 | Train loss:   0.034714 | Val. loss:   0.000255 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  39
+Epoch: 774/800 | Train loss:   0.032498 | Val. loss:   0.000461 | Val. BER (4.0 dB):   0.000113 | Val. BLER (4.0 dB):   0.004000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  40
+Epoch: 775/800 | Train loss:   0.032693 | Val. loss:   0.000399 | Val. BER (4.0 dB):   0.000105 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  41
+Epoch: 776/800 | Train loss:   0.033019 | Val. loss:   0.000225 | Val. BER (4.0 dB):   0.000055 | Val. BLER (4.0 dB):   0.002750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  42
+Epoch: 777/800 | Train loss:   0.033517 | Val. loss:   0.000304 | Val. BER (4.0 dB):   0.000055 | Val. BLER (4.0 dB):   0.001750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  43
+Epoch: 778/800 | Train loss:   0.034233 | Val. loss:   0.000294 | Val. BER (4.0 dB):   0.000070 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  44
+Epoch: 779/800 | Train loss:   0.033391 | Val. loss:   0.000265 | Val. BER (4.0 dB):   0.000063 | Val. BLER (4.0 dB):   0.001500 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  45
+Epoch: 780/800 | Train loss:   0.033445 | Val. loss:   0.000280 | Val. BER (4.0 dB):   0.000059 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  46
+Epoch: 781/800 | Train loss:   0.032149 | Val. loss:   0.000353 | Val. BER (4.0 dB):   0.000066 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  47
+Epoch: 782/800 | Train loss:   0.032862 | Val. loss:   0.000799 | Val. BER (4.0 dB):   0.000215 | Val. BLER (4.0 dB):   0.005000 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  48
+Epoch: 783/800 | Train loss:   0.033933 | Val. loss:   0.000457 | Val. BER (4.0 dB):   0.000121 | Val. BLER (4.0 dB):   0.002750 | Batch size: 4000 | Learning rate: 1.000000e-04 | Stuck:  49
+Loss stuck for 50 epochs: reduce learning rate to 1.000000e-05.
+Epoch: 784/800 | Train loss:   0.034186 | Val. loss:   0.000310 | Val. BER (4.0 dB):   0.000098 | Val. BLER (4.0 dB):   0.003500 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   0
+Epoch: 785/800 | Train loss:   0.032757 | Val. loss:   0.000410 | Val. BER (4.0 dB):   0.000148 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   1
+Epoch: 786/800 | Train loss:   0.032620 | Val. loss:   0.000278 | Val. BER (4.0 dB):   0.000051 | Val. BLER (4.0 dB):   0.001750 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   2
+Epoch: 787/800 | Train loss:   0.032808 | Val. loss:   0.000284 | Val. BER (4.0 dB):   0.000074 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   3
+Epoch: 788/800 | Train loss:   0.032658 | Val. loss:   0.000616 | Val. BER (4.0 dB):   0.000188 | Val. BLER (4.0 dB):   0.004250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   4
+Epoch: 789/800 | Train loss:   0.032444 | Val. loss:   0.000467 | Val. BER (4.0 dB):   0.000105 | Val. BLER (4.0 dB):   0.003750 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   5
+Epoch: 790/800 | Train loss:   0.032672 | Val. loss:   0.000437 | Val. BER (4.0 dB):   0.000125 | Val. BLER (4.0 dB):   0.003250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   6
+Epoch: 791/800 | Train loss:   0.033364 | Val. loss:   0.000153 | Val. BER (4.0 dB):   0.000016 | Val. BLER (4.0 dB):   0.001000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   0
+Epoch: 792/800 | Train loss:   0.033249 | Val. loss:   0.000239 | Val. BER (4.0 dB):   0.000039 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   1
+Epoch: 793/800 | Train loss:   0.032950 | Val. loss:   0.000384 | Val. BER (4.0 dB):   0.000109 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   2
+Epoch: 794/800 | Train loss:   0.032992 | Val. loss:   0.000411 | Val. BER (4.0 dB):   0.000133 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   3
+Epoch: 795/800 | Train loss:   0.033109 | Val. loss:   0.000465 | Val. BER (4.0 dB):   0.000113 | Val. BLER (4.0 dB):   0.002500 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   4
+Epoch: 796/800 | Train loss:   0.033001 | Val. loss:   0.000557 | Val. BER (4.0 dB):   0.000195 | Val. BLER (4.0 dB):   0.004500 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   5
+Epoch: 797/800 | Train loss:   0.033467 | Val. loss:   0.000192 | Val. BER (4.0 dB):   0.000035 | Val. BLER (4.0 dB):   0.002000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   6
+Epoch: 798/800 | Train loss:   0.033513 | Val. loss:   0.000698 | Val. BER (4.0 dB):   0.000258 | Val. BLER (4.0 dB):   0.004000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   7
+Epoch: 799/800 | Train loss:   0.033555 | Val. loss:   0.000495 | Val. BER (4.0 dB):   0.000117 | Val. BLER (4.0 dB):   0.003000 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   8
+Epoch: 800/800 | Train loss:   0.033256 | Val. loss:   0.000256 | Val. BER (4.0 dB):   0.000094 | Val. BLER (4.0 dB):   0.002250 | Batch size: 4000 | Learning rate: 1.000000e-05 | Stuck:   9
+Saving model [epoch 800]
+Starting inference on 2 worker(s) ...
+SNR 1.0: rank 0 processed 1000 local batches.
+SNR 1.0: rank 0 processed 2000 local batches.
+SNR 1.0: rank 0 processed 3000 local batches.
+SNR 1.0: rank 0 processed 4000 local batches.
+SNR 1.0: rank 0 processed 5000 local batches.
+SNR 1.0: rank 0 processed 6000 local batches.
+SNR 1.0: rank 0 processed 7000 local batches.
+SNR 1.0: rank 0 processed 8000 local batches.
+SNR 1.0: rank 0 processed 9000 local batches.
+SNR 1.0: rank 0 processed 10000 local batches.
+For SNR = 1.0, the average BER is 0.078623878125, the average BLER is 0.4580546 (10000000 samples across 2 workers)
+SNR 2.0: rank 0 processed 1000 local batches.
+SNR 2.0: rank 0 processed 2000 local batches.
+SNR 2.0: rank 0 processed 3000 local batches.
+SNR 2.0: rank 0 processed 4000 local batches.
+SNR 2.0: rank 0 processed 5000 local batches.
+SNR 2.0: rank 0 processed 6000 local batches.
+SNR 2.0: rank 0 processed 7000 local batches.
+SNR 2.0: rank 0 processed 8000 local batches.
+SNR 2.0: rank 0 processed 9000 local batches.
+SNR 2.0: rank 0 processed 10000 local batches.
+For SNR = 2.0, the average BER is 0.016594078125, the average BLER is 0.1410767 (10000000 samples across 2 workers)
+SNR 3.0: rank 0 processed 1000 local batches.
+SNR 3.0: rank 0 processed 2000 local batches.
+SNR 3.0: rank 0 processed 3000 local batches.
+SNR 3.0: rank 0 processed 4000 local batches.
+SNR 3.0: rank 0 processed 5000 local batches.
+SNR 3.0: rank 0 processed 6000 local batches.
+SNR 3.0: rank 0 processed 7000 local batches.
+SNR 3.0: rank 0 processed 8000 local batches.
+SNR 3.0: rank 0 processed 9000 local batches.
+SNR 3.0: rank 0 processed 10000 local batches.
+For SNR = 3.0, the average BER is 0.001594978125, the average BLER is 0.0220016 (10000000 samples across 2 workers)
+SNR 4.0: rank 0 processed 1000 local batches.
+SNR 4.0: rank 0 processed 2000 local batches.
+SNR 4.0: rank 0 processed 3000 local batches.
+SNR 4.0: rank 0 processed 4000 local batches.
+SNR 4.0: rank 0 processed 5000 local batches.
+SNR 4.0: rank 0 processed 6000 local batches.
+SNR 4.0: rank 0 processed 7000 local batches.
+SNR 4.0: rank 0 processed 8000 local batches.
+SNR 4.0: rank 0 processed 9000 local batches.
+SNR 4.0: rank 0 processed 10000 local batches.
+For SNR = 4.0, the average BER is 9.116875e-05, the average BLER is 0.002419 (10000000 samples across 2 workers)
+SNR 5.0: rank 0 processed 1000 local batches.
+SNR 5.0: rank 0 processed 2000 local batches.
+SNR 5.0: rank 0 processed 3000 local batches.
+SNR 5.0: rank 0 processed 4000 local batches.
+SNR 5.0: rank 0 processed 5000 local batches.
+SNR 5.0: rank 0 processed 6000 local batches.
+SNR 5.0: rank 0 processed 7000 local batches.
+SNR 5.0: rank 0 processed 8000 local batches.
+SNR 5.0: rank 0 processed 9000 local batches.
+SNR 5.0: rank 0 processed 10000 local batches.
+For SNR = 5.0, the average BER is 5.9484375e-06, the average BLER is 0.0002522 (10000000 samples across 2 workers)
+SNR 6.0: rank 0 processed 1000 local batches.
+SNR 6.0: rank 0 processed 2000 local batches.
+SNR 6.0: rank 0 processed 3000 local batches.
+SNR 6.0: rank 0 processed 4000 local batches.
+SNR 6.0: rank 0 processed 5000 local batches.
+SNR 6.0: rank 0 processed 6000 local batches.
+SNR 6.0: rank 0 processed 7000 local batches.
+SNR 6.0: rank 0 processed 8000 local batches.
+SNR 6.0: rank 0 processed 9000 local batches.
+SNR 6.0: rank 0 processed 10000 local batches.
+For SNR = 6.0, the average BER is 4.046875e-07, the average BLER is 2.23e-05 (10000000 samples across 2 workers)
+The snr_db values for inference are:  [1. 2. 3. 4. 5. 6.]
+The average bit error rate is:  [0.0786239, 0.0165941, 0.001595, 9.12e-05, 5.9e-06, 4e-07]
+The average block error rate is:  [0.4580546, 0.1410767, 0.0220016, 0.002419, 0.0002522, 2.23e-05]
+Finished inference!
