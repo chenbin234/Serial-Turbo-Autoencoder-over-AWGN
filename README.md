@@ -8,8 +8,6 @@ A PyTorch reproduction of the serial turbo autoencoder (TurboAE) on the AWGN cha
 > Jannis Clausius, Sebastian Dörner, Sebastian Cammerer, Stephan ten Brink.<br>
 > *11th International Symposium on Topics in Coding (ISTC)*, 2021. doi: [10.1109/ISTC49272.2021.9594130](https://doi.org/10.1109/ISTC49272.2021.9594130)
 
-This is an independent implementation, not the authors' code. It includes training code and two pretrained models.
-
 ## Contents
 
 1. [Overview](#1-overview)
@@ -17,7 +15,6 @@ This is an independent implementation, not the authors' code. It includes traini
 3. [Repository Structure](#3-repository-structure)
 4. [Evaluating the Pretrained Models](#4-evaluating-the-pretrained-models)
 5. [Training from Scratch](#5-training-from-scratch)
-6. [Citation](#6-citation)
 7. [License](#7-license)
 
 ## 1. Overview
@@ -43,20 +40,13 @@ Both variants use the same encoder. They differ in how the 6 decoder iterations 
 
 ### Results
 
-BER and BLER of the released models, with $10^7$ random packets per SNR point:
+The training loss (BER/BLER validation) does not appear to stop decreasing, so a bit more improvement is expected if you fine-tune them.
 
-| $E_b/N_0$ [dB] | BER, weight-shared | BLER, weight-shared | BER, unrolled | BLER, unrolled |
-| ---: | ---: | ---: | ---: | ---: |
-| 1 | 8.02e-2 | 4.84e-1 | 7.86e-2 | 4.58e-1 |
-| 2 | 1.82e-2 | 1.60e-1 | 1.66e-2 | 1.41e-1 |
-| 3 | 1.95e-3 | 2.86e-2 | 1.60e-3 | 2.20e-2 |
-| 4 | 1.35e-4 | 3.71e-3 | 9.02e-5 | 2.43e-3 |
-| 5 | 1.07e-5 | 4.40e-4 | 5.90e-6 | 2.56e-4 |
-| 6 | 1.37e-6 | 6.22e-5 | 3.53e-7 | 1.92e-5 |
+![image-20261029132208521](./assets/image-20261029132208521.png)
 
-At a BER of $10^{-4}$, the weight-shared model needs about 4.1 dB and the unrolled model about 4.0 dB. The paper reports about 3.9 dB for its serial TurboAE (Fig. 7).
+![image-20261029132930916](./assets/image-20261029132930916.png)
 
-**Not included:** the Gaussian pre-training of the parallel TurboAE (Sec. IV) and the classical reference curves (LTE turbo, LDPC, normal approximation).
+
 
 ## 2. Installation
 
@@ -103,7 +93,6 @@ wandb login
 ├── src/
 │   ├── models/
 │   │   ├── serial_turbo_autoencoder.py    # Serial TurboAE: Encoder, Decoder, end-to-end Turbo_AutoEncoder
-│   │   ├── parallel_turbo_autoencoder.py  # Parallel TurboAE of Jiang et al. (rate 1/3, no checkpoint)
 │   │   └── components/                    # Straight-through estimator (STE.py) and other layers
 │   ├── channel/
 │   │   └── AWGN_Channel.py                # Complex AWGN channel, SNR given as Es/N0
@@ -120,8 +109,6 @@ wandb login
 ├── uv.lock                                # Locked dependency versions
 └── LICENSE
 ```
-
-The synchronization modules in `components/` (`sync_*.py`), [BFC_debug.py](src/channel/BFC_debug.py), and `TurboAutoencoderSync` come from a block-fading version of this code base and are not used on the AWGN channel.
 
 ## 4. Evaluating the Pretrained Models
 
@@ -155,11 +142,6 @@ num_of_pair: int = 6
 ```bash
 python -m src.train.train_turbo_ae --p-array-seed 15
 ```
-
-> [!IMPORTANT]
-> The interleaver seed `--p-array-seed` (default 6) and the random seed `--seed` (default 2) are command-line options and override the `TurboAEConfig` fields of the same name. A checkpoint must be evaluated with the interleaver seed it was trained with; otherwise the BER shows an error floor.
-
-The BER and BLER at each SNR are printed to the console and logged to W&B as tables.
 
 ## 5. Training from Scratch
 
@@ -212,26 +194,6 @@ The `TurboAEConfig` fields behind the hyperparameters in Table I of the paper:
 | – | `epochs` | 800 | Total training epochs |
 | – | `loss_function` | BCE | Binary cross-entropy on the bit estimates |
 | – | `enforce_qpsk_symbols` | False | `True` binarizes the inner encoder output ("Serial TurboAE Binary" in Fig. 5) |
-
-## 6. Citation
-
-If you use this code, please cite the original paper:
-
-```bibtex
-@inproceedings{clausius2021serial,
-  author    = {Clausius, Jannis and D{\"o}rner, Sebastian and Cammerer, Sebastian and ten Brink, Stephan},
-  title     = {Serial vs. Parallel Turbo-Autoencoders and Accelerated Training for Learned Channel Codes},
-  booktitle = {2021 11th International Symposium on Topics in Coding (ISTC)},
-  year      = {2021},
-  pages     = {1--5},
-  doi       = {10.1109/ISTC49272.2021.9594130}
-}
-```
-
-### Related work
-
-- **TurboAE.** Y. Jiang, H. Kim, H. Asnani, S. Kannan, S. Oh, and P. Viswanath, "Turbo Autoencoder: Deep learning based channel codes for point-to-point communication channels," in *Advances in Neural Information Processing Systems*, 2019. [Online](https://proceedings.neurips.cc/paper_files/paper/2019/hash/228499b55310264a8ea0e27b6e7c6ab6-Abstract.html)
-- **Extension to unknown delay and block fading.** The serial TurboAE with a neural synchronizer, compared with a finite-blocklength achievability bound: [Turbo-Autoencoder-vs.-Finite-Blocklength-Bound](https://github.com/chenbin234/Turbo-Autoencoder-vs.-Finite-Blocklength-Bound).
 
 ## 7. License
 
