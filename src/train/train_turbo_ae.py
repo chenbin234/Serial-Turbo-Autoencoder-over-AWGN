@@ -41,8 +41,8 @@ class TurboAEConfig:
     trainable_parameters: int = 0
     epochs: int = 800
     epochs_integrate_sync: int = 0
-    num_samples: int = 500
-    batch_size: int = 500
+    num_samples: int = 5000
+    batch_size: int = 5000
     start_epoch: int = 1
     print_every: int | None = None
     save_every: int = 800
@@ -89,9 +89,9 @@ class TurboAEConfig:
     alpha: float = 0.5
     beta: float = 1
     pretrained: str | None = (
-        None  # Path to the pretrained model: "./trained_models/Turbo_AutoEncoder_20241205_10_38_41/Turbo_AutoEncoder_20241205_10_38_41_epoch10.pth"
+        "./trained_models/Turbo_AutoEncoder_k64n64_iter6_pair1_20261027_10_51_27/Turbo_AutoEncoder_20261027_10_51_27_epoch800.pth"  # Path to the pretrained model: "./trained_models/Turbo_AutoEncoder_20241205_10_38_41/Turbo_AutoEncoder_20241205_10_38_41_epoch10.pth"
     )
-    is_inference: bool = False  # Skip training entirely and only run inference on "pretrained".
+    is_inference: bool = True  # Skip training entirely and only run inference on "pretrained".
     loss_function: str = "BCE"  # "BCE", "MSE", "ProductLoss", "MaxLoss", "SmoothMaxLoss", "LogSumExpLoss", "PNormLoss", "HybridBCESoftBLERLoss", "HybridBCEProductLoss", "HybridBCEMaxLoss", "HybridBCESmoothMaxLoss", "HybridBCELogSumExpLoss", "HybridBCEPNormLoss"
     bce_epsilon: float = 1e-7  # Avoid exact 0/1 probabilities in BCELoss.
     grad_clip_norm: float = 1.0  # Prevent rare exploding gradients from poisoning weights.
@@ -121,7 +121,7 @@ class TurboAEConfig:
     )
     is_soft_qpsk: bool = False  # if true, pull the encoder output toward normalized QPSK without forcing it; excludes enforce_qpsk_symbols
     soft_qpsk_alpha: float = 0.8  # used by is_soft_qpsk, in [0, 1]: 0 leaves unit-energy symbols unchanged, 1 snaps them onto QPSK
-    p_array_seed: int = 3
+    p_array_seed: int = 6
     seed: int = 0
 
 
@@ -333,7 +333,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--p-array-seed",
         type=int,
-        default=3,
+        default=6,
         help="Seed used to generate the interleaver permutation array.",
     )
     parser.add_argument(
