@@ -47,14 +47,14 @@ BER and BLER of the released models, with $10^7$ random packets per SNR point:
 
 | $E_b/N_0$ [dB] | BER, weight-shared | BLER, weight-shared | BER, unrolled | BLER, unrolled |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 8.02e-2 | 4.84e-1 | TBD | TBD |
-| 2 | 1.82e-2 | 1.60e-1 | TBD | TBD |
-| 3 | 1.95e-3 | 2.86e-2 | TBD | TBD |
-| 4 | 1.35e-4 | 3.71e-3 | TBD | TBD |
-| 5 | 1.07e-5 | 4.40e-4 | TBD | TBD |
-| 6 | 1.37e-6 | 6.22e-5 | TBD | TBD |
+| 1 | 8.02e-2 | 4.84e-1 | 7.86e-2 | 4.58e-1 |
+| 2 | 1.82e-2 | 1.60e-1 | 1.66e-2 | 1.41e-1 |
+| 3 | 1.95e-3 | 2.86e-2 | 1.60e-3 | 2.20e-2 |
+| 4 | 1.35e-4 | 3.71e-3 | 9.02e-5 | 2.43e-3 |
+| 5 | 1.07e-5 | 4.40e-4 | 5.90e-6 | 2.56e-4 |
+| 6 | 1.37e-6 | 6.22e-5 | 3.53e-7 | 1.92e-5 |
 
-At a BER of $10^{-4}$, the weight-shared model needs about 4.1 dB and the unrolled model about TBD dB. The paper reports about 3.9 dB for its serial TurboAE (Fig. 7).
+At a BER of $10^{-4}$, the weight-shared model needs about 4.1 dB and the unrolled model about 4.0 dB. The paper reports about 3.9 dB for its serial TurboAE (Fig. 7).
 
 **Not included:** the Gaussian pre-training of the parallel TurboAE (Sec. IV) and the classical reference curves (LTE turbo, LDPC, normal approximation).
 
