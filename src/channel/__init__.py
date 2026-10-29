@@ -1,5 +1,5 @@
 """channel model module."""
 
-from .BFC_debug import RayleighBlockFadingChannel
+from .AWGN_Channel import AWGN_Channel_complex
 
-__all__ = ["RayleighBlockFadingChannel"]
+__all__ = ["AWGN_Channel_complex"]
